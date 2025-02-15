@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { OverviewMap } from "ol/control";
 import { Map } from "ol";
-import { sourceOSM } from "../../map/sourceOSM";
+import OSM from "ol/source/OSM";
 import TileLayer from "ol/layer/Tile";
 
 interface Props {
@@ -14,7 +14,7 @@ const MapOverview: React.FC<Props> = ({ map }) => {
 
     const overview = new OverviewMap({
       collapsed: false,
-      layers: [new TileLayer({ source: sourceOSM })],
+      layers: [new TileLayer({ source: new OSM() })],
     });
     map.addControl(overview);
 

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import TileLayer from "ol/layer/Tile";
-import { sourceOSM } from "../../map/sourceOSM";
 import { Map } from "ol";
+import OSM from "ol/source/OSM";
 
 interface Props {
   map: Map;
@@ -12,7 +12,7 @@ const BaseLayer: React.FC<Props> = ({ map }) => {
     if (!map) return; // Ensure map is not null
 
     const baseLayer = new TileLayer({
-      source: sourceOSM,
+      source: new OSM(),
     });
 
     map.addLayer(baseLayer);
