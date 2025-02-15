@@ -1,0 +1,41 @@
+import { useLayoutEffect, useRef, useState } from "react";
+import Map from "ol/Map";
+import View from "ol/View";
+import { fromLonLat } from "ol/proj";
+import "ol/ol.css";
+import BaseLayer from "./layers/BaseLayer.tsx";
+
+const MapContainer: React.FC = () => {
+  const mapRef = useRef<HTMLDivElement>(null);
+  const [mapInstance, setMapInstance] = useState<Map | null>(null);
+
+  useLayoutEffect(() => {
+    if (!mapRef.current) return;
+
+    const map = new Map({
+      target: mapRef.current,
+      view: new View({
+        center: fromLonLat([10, 59]),
+        zoom: 5,
+      }),
+      controls: [], // Disable default controls
+    });
+
+    setMapInstance(map);
+
+    return () => map.setTarget(undefined);
+  }, []); // Empty dependency array ensures it runs once when the component mounts
+
+  return (
+    <div>
+      <div ref={mapRef} className="map-container" />
+      {mapInstance && (
+        <>
+          <BaseLayer map={mapInstance} />
+        </>
+      )}
+    </div>
+  );
+};
+
+export default MapContainer;

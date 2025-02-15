@@ -1,9 +1,12 @@
+import MapContainer from "./components/MapContainer";
 import "./styles/App.css";
 
 function App() {
   return (
     <>
-      <div />
+      <div>
+        <MapContainer />
+      </div>
     </>
   );
 }
