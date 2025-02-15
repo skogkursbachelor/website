@@ -7,6 +7,7 @@ import BaseLayer from "./layers/BaseLayer.tsx";
 import MapZoom from "./controls/MapZoom.tsx";
 import MapOverview from "./controls/MapOverview.tsx";
 import MapScaleLine from "./controls/MapScaleLine.tsx";
+import SuperficialDepositsLayer from "./layers/SuperficialDepositsLayer.tsx";
 
 const MapContainer: React.FC = () => {
   const mapRef = useRef<HTMLDivElement>(null);
@@ -38,6 +39,7 @@ const MapContainer: React.FC = () => {
           <MapZoom map={mapInstance} />
           <MapOverview map={mapInstance} />
           <MapScaleLine map={mapInstance} />
+          <SuperficialDepositsLayer map={mapInstance} />
         </>
       )}
     </div>
