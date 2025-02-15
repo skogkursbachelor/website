@@ -4,6 +4,7 @@ import View from "ol/View";
 import { fromLonLat } from "ol/proj";
 import "ol/ol.css";
 import BaseLayer from "./layers/BaseLayer.tsx";
+import MapZoom from "./controls/MapZoom.tsx";
 
 const MapContainer: React.FC = () => {
   const mapRef = useRef<HTMLDivElement>(null);
@@ -32,6 +33,7 @@ const MapContainer: React.FC = () => {
       {mapInstance && (
         <>
           <BaseLayer map={mapInstance} />
+          <MapZoom map={mapInstance} />
         </>
       )}
     </div>
