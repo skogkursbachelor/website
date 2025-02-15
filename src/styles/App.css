@@ -19,3 +19,10 @@ body {
   top: 10px;
   left: 10px;
 }
+
+.map-container .ol-overviewmap {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  z-index: 8;
+}
