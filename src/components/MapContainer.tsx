@@ -6,6 +6,7 @@ import "ol/ol.css";
 import BaseLayer from "./layers/BaseLayer.tsx";
 import MapZoom from "./controls/MapZoom.tsx";
 import MapOverview from "./controls/MapOverview.tsx";
+import MapScaleLine from "./controls/MapScaleLine.tsx";
 
 const MapContainer: React.FC = () => {
   const mapRef = useRef<HTMLDivElement>(null);
@@ -36,6 +37,7 @@ const MapContainer: React.FC = () => {
           <BaseLayer map={mapInstance} />
           <MapZoom map={mapInstance} />
           <MapOverview map={mapInstance} />
+          <MapScaleLine map={mapInstance} />
         </>
       )}
     </div>

@@ -26,3 +26,10 @@ body {
   left: 10px;
   z-index: 8;
 }
+
+.map-container .ol-scale-line {
+  position: absolute;
+  bottom: 10px;
+  left: 170px;
+  z-index: 9;
+}
