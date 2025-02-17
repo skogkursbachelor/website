@@ -3,11 +3,12 @@ import Map from "ol/Map";
 import View from "ol/View";
 import { fromLonLat } from "ol/proj";
 import "ol/ol.css";
-import BaseLayer from "./layers/BaseLayer.tsx";
+import BaseLayerGroup from "./layers/BaseLayerGroup.tsx";
 import MapZoom from "./controls/MapZoom.tsx";
 import MapOverview from "./controls/MapOverview.tsx";
 import MapScaleLine from "./controls/MapScaleLine.tsx";
 import SuperficialDepositsLayer from "./layers/SuperficialDepositsLayer.tsx";
+import BaseLayerSelector from "./controls/BaseLayerSelector.tsx";
 
 const MapContainer: React.FC = () => {
   const mapRef = useRef<HTMLDivElement>(null);
@@ -35,11 +36,12 @@ const MapContainer: React.FC = () => {
       <div ref={mapRef} className="map-container" />
       {mapInstance && (
         <>
-          <BaseLayer map={mapInstance} />
+          <BaseLayerGroup map={mapInstance} />
+          <SuperficialDepositsLayer map={mapInstance} />
           <MapZoom map={mapInstance} />
           <MapOverview map={mapInstance} />
           <MapScaleLine map={mapInstance} />
-          <SuperficialDepositsLayer map={mapInstance} />
+          <BaseLayerSelector map={mapInstance} />
         </>
       )}
     </div>
