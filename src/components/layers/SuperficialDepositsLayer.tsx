@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Map } from "ol";
 import ImageLayer from "ol/layer/Image";
 import ImageWMS from "ol/source/ImageWMS";
@@ -8,11 +8,9 @@ interface Props {
 }
 
 const SuperficialDepositsLayer: React.FC<Props> = ({ map }) => {
-  useEffect(() => {
-    if (!map) return; // Ensure map is not null
-
-    const SuperficialDepositsWMS = new ImageWMS({
-      url: "https://geo.ngu.no/mapserver/LosmasserWMS2?",
+  const [layer] = useState(() => {
+    const superficialDepositsWMS = new ImageWMS({
+      url: "https://geo.ngu.no/mapserver/LosmasserWMS2?request=GetCapabilities&service=WMS",
       params: {
         LAYERS: "Losmasse_Norge,Losmasse_flate,Losmasseflate_SOSI_kode",
         VERSION: "1.3.0",
@@ -21,21 +19,25 @@ const SuperficialDepositsLayer: React.FC<Props> = ({ map }) => {
       serverType: "mapserver",
     });
 
-    const SuperficialDepositsImageLayer = new ImageLayer({
-      source: SuperficialDepositsWMS,
+    return new ImageLayer({
+      source: superficialDepositsWMS,
       opacity: 0.75,
       visible: true,
     });
+  });
 
-    map.addLayer(SuperficialDepositsImageLayer);
+  useEffect(() => {
+    if (map) {
+      map.addLayer(layer);
 
-    // Clean up on unmount
-    return () => {
-      map.removeLayer(SuperficialDepositsImageLayer);
-    };
+      // Clean up the layer on unmount
+      return () => {
+        map.removeLayer(layer); // Remove layer when component is unmounted
+      };
+    }
   }, [map]);
 
-  return null; // No UI to render
+  return null; // No UI to render, layer added via map
 };
 
 export default SuperficialDepositsLayer;
