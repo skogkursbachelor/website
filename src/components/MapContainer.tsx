@@ -14,6 +14,7 @@ import SidebarLayerSelector from "./controls/SidebarLayerSelector.tsx";
 import FrostDepthLayer from "./layers/FrostDepthLayer.tsx";
 import MapGeolocation from "./controls/MapGeolocation.tsx";
 import NibioSoilMoistureLayer from "./layers/NibioSoilMoistureLayer.tsx";
+import ForestryRoadLayer from "./layers/ForestryRoadLayer.tsx";
 
 const MapContainer: React.FC = () => {
   const mapRef = useRef<HTMLDivElement>(null);
@@ -54,6 +55,7 @@ const MapContainer: React.FC = () => {
               SoilMoistureLayer,
               FrostDepthLayer,
               NibioSoilMoistureLayer,
+              ForestryRoadLayer,
             ]}
           />
         </>
