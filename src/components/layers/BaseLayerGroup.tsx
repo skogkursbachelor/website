@@ -15,7 +15,7 @@ const BaseLayerGroup: React.FC<Props> = ({ map }) => {
     const standardLayer = new TileLayer({
       source: new OSM(),
       visible: true, // Default visible layer
-      properties: { title: "Standard" },
+      properties: { title: "Standard", imageLocation: "/standardMap.png" },
     });
 
     const topoLayer = new TileLayer({
@@ -23,7 +23,7 @@ const BaseLayerGroup: React.FC<Props> = ({ map }) => {
         url: "https://{a-c}.tile.opentopomap.org/{z}/{x}/{y}.png",
       }),
       visible: false,
-      properties: { title: "Terreng" },
+      properties: { title: "Terreng", imageLocation: "/topoMap.png" },
     });
 
     const baseLayerGroup = new LayerGroup({
