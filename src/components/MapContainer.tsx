@@ -11,6 +11,7 @@ import SuperficialDepositsLayer from "./layers/SuperficialDepositsLayer.tsx";
 import SoilMoistureLayer from "./layers/NcWMSLayer.tsx";
 import BaseLayerSelector from "./controls/BaseLayerSelector.tsx";
 import SidebarLayerSelector from "./controls/SidebarLayerSelector.tsx";
+import FrostDepthLayer from "./layers/FrostDepthLayer.tsx";
 
 const MapContainer: React.FC = () => {
   const mapRef = useRef<HTMLDivElement>(null);
@@ -45,7 +46,11 @@ const MapContainer: React.FC = () => {
           <BaseLayerSelector map={mapInstance} />
           <SidebarLayerSelector
             map={mapInstance}
-            layers={[SuperficialDepositsLayer, SoilMoistureLayer]}
+            layers={[
+              SuperficialDepositsLayer,
+              SoilMoistureLayer,
+              FrostDepthLayer,
+            ]}
           />
         </>
       )}
