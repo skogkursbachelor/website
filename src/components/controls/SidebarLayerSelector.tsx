@@ -9,12 +9,15 @@ interface Props {
 }
 
 const SidebarLayerSelector: React.FC<Props> = ({ map, layers }) => {
-  const [isOpen, setIsOpen] = useState(true); // Sidebar starts open
+  const [isOpen, setIsOpen] = useState(false); // Sidebar starts closed
 
   return (
     <div>
       {/* Button to toggle sidebar visibility */}
-      <button className="sidebar-toggle-btn" onClick={() => setIsOpen(!isOpen)}>
+      <button
+        className="sidebar-toggle-button"
+        onClick={() => setIsOpen(!isOpen)}
+      >
         {isOpen ? "Skjul Kartvalg" : "Vis Kartvalg"}
       </button>
 
