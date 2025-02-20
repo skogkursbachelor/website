@@ -54,7 +54,16 @@ const BaseLayerSelector: React.FC<Props> = ({ map }) => {
   return (
     <div className="base-layer-selector">
       {layers.map((layer, index) => (
-        <button key={index} onClick={() => setActiveLayer(index)}>
+        <button
+          key={index}
+          onClick={() => setActiveLayer(index)}
+          style={{
+            backgroundImage: `url(${layer.getProperties().imageLocation})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+          }}
+        >
           {layer.getProperties().title}
         </button>
       ))}
