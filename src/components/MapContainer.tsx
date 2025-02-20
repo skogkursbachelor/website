@@ -12,6 +12,7 @@ import SoilMoistureLayer from "./layers/NcWMSLayer.tsx";
 import BaseLayerSelector from "./controls/BaseLayerSelector.tsx";
 import SidebarLayerSelector from "./controls/SidebarLayerSelector.tsx";
 import FrostDepthLayer from "./layers/FrostDepthLayer.tsx";
+import MapGeolocation from "./controls/MapGeolocation.tsx";
 
 const MapContainer: React.FC = () => {
   const mapRef = useRef<HTMLDivElement>(null);
@@ -43,6 +44,7 @@ const MapContainer: React.FC = () => {
           <MapZoom map={mapInstance} />
           <MapOverview map={mapInstance} />
           <MapScaleLine map={mapInstance} />
+          <MapGeolocation map={mapInstance} />
           <BaseLayerSelector map={mapInstance} />
           <SidebarLayerSelector
             map={mapInstance}
