@@ -13,7 +13,7 @@ const FrostDepthLayer = new ImageLayer({
       VERSION: "1.1.1",
       LAYERS: "gwb_frd",
       UNITTYPE: "cm",
-      TIME: "2021-01-01",
+      TIME: `${new Date().toISOString().split("T")[0]}`,
       EXCEPTIONS: "BLANK",
     },
     ratio: 1,

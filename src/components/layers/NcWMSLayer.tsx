@@ -1,9 +1,12 @@
 import ImageLayer from "ol/layer/Image";
 import ImageWMS from "ol/source/ImageWMS";
 
-// Define the layer outside the component
 const SoilMoistureLayer = new ImageLayer({
-  properties: { title: "Jordfuktighet" },
+  properties: {
+    title: "Jordfuktighet",
+    minDate: "2024-01-01",
+    maxDate: "2024-12-31",
+  },
   opacity: 0.75,
   visible: false, // Default to false
   source: new ImageWMS({
@@ -12,8 +15,8 @@ const SoilMoistureLayer = new ImageLayer({
       item: "layerDetails",
       layers: "1/sm",
       styles: "raster/default",
-      TIME: "2024-04-19T00:00:00.000Z", // Example time
-      // TODO: Add time control
+      TIME: `${new Date().toISOString().split("T")[0]}`,
+      EXCEPTIONS: "BLANK",
     },
     ratio: 1,
   }),
