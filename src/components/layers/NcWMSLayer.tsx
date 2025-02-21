@@ -7,8 +7,7 @@ const SoilMoistureLayer = new ImageLayer({
   opacity: 0.75,
   visible: false, // Default to false
   source: new ImageWMS({
-    // TODO: Get URL from env or config
-    url: "http://10.212.171.219:3030/ncWMS2/wms",
+    url: import.meta.env.VITE_NCWMS_URL,
     params: {
       item: "layerDetails",
       layers: "1/sm",
