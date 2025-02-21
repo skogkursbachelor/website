@@ -31,6 +31,30 @@ const DatePicker: React.FC<Props> = ({ layers, date, setDate }) => {
 
   return (
     <div className="date-picker">
+      {/* Previous year button */}
+      <button
+        className="date-picker-button"
+        onClick={() => {
+          const prevYear = new Date(date);
+          prevYear.setFullYear(prevYear.getFullYear() - 1);
+          handleDateChange(prevYear);
+        }}
+      >
+        {"<<<"}
+      </button>
+
+      {/* Previous week button */}
+      <button
+        className="date-picker-button"
+        onClick={() => {
+          const prevWeek = new Date(date);
+          prevWeek.setDate(prevWeek.getDate() - 7);
+          handleDateChange(prevWeek);
+        }}
+      >
+        {"<<"}
+      </button>
+
       {/* Previous day button */}
       <button
         className="date-picker-button"
@@ -60,6 +84,30 @@ const DatePicker: React.FC<Props> = ({ layers, date, setDate }) => {
         }}
       >
         {">"}
+      </button>
+
+      {/* Next week button */}
+      <button
+        className="date-picker-button"
+        onClick={() => {
+          const nextWeek = new Date(date);
+          nextWeek.setDate(nextWeek.getDate() + 7);
+          handleDateChange(nextWeek);
+        }}
+      >
+        {">>"}
+      </button>
+
+      {/* Next year button */}
+      <button
+        className="date-picker-button"
+        onClick={() => {
+          const nextYear = new Date(date);
+          nextYear.setFullYear(nextYear.getFullYear() + 1);
+          handleDateChange(nextYear);
+        }}
+      >
+        {">>>"}
       </button>
     </div>
   );
