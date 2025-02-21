@@ -9,7 +9,7 @@ interface Props {
 }
 
 const SidebarLayerSelector: React.FC<Props> = ({ map, layers }) => {
-  const [isOpen, setIsOpen] = useState(false); // Sidebar starts closed
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div>
@@ -33,10 +33,12 @@ const SidebarLayerSelector: React.FC<Props> = ({ map, layers }) => {
 export default SidebarLayerSelector;
 
 const ToggleLayers: React.FC<Props> = ({ map, layers }) => {
-  const [visibility, setVisibility] = useState<boolean[]>(() =>
+  // Track visibility for each layer
+  const [visibility, setVisibility] = useState<boolean[]>(
     layers.map((layer) => layer.getVisible())
   );
 
+  // Add or remove layers when the map or layers change
   useEffect(() => {
     if (!map || layers.length === 0) return;
 
@@ -55,19 +57,20 @@ const ToggleLayers: React.FC<Props> = ({ map, layers }) => {
     };
   }, [map, layers]);
 
+  // Toggle visibility of a layer
   const toggleLayer = (index: number) => {
     setVisibility((prevVisibility) => {
-      return prevVisibility.map((visible, i) => {
-        if (i === index) {
-          const newVisibility = !visible;
-          layers[i].setVisible(newVisibility);
-          return newVisibility;
-        }
-        return visible;
-      });
+      const newVisibility = [...prevVisibility];
+      newVisibility[index] = !newVisibility[index];
+      layers[index].setVisible(newVisibility[index]);
+      return newVisibility;
     });
   };
 
+  useEffect(() => {
+    // Update the visibility state if the layers change dynamically
+    setVisibility(layers.map((layer) => layer.getVisible()));
+  }, [layers]);
   return (
     <div className="layer-list">
       {layers.map((layer, index) => (

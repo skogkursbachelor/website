@@ -7,18 +7,29 @@ import BaseLayerGroup from "./layers/BaseLayerGroup.tsx";
 import MapZoom from "./controls/MapZoom.tsx";
 import MapOverview from "./controls/MapOverview.tsx";
 import MapScaleLine from "./controls/MapScaleLine.tsx";
-import SuperficialDepositsLayer from "./layers/SuperficialDepositsLayer.tsx";
-import SoilMoistureLayer from "./layers/NcWMSLayer.tsx";
 import BaseLayerSelector from "./controls/BaseLayerSelector.tsx";
 import SidebarLayerSelector from "./controls/SidebarLayerSelector.tsx";
-import FrostDepthLayer from "./layers/FrostDepthLayer.tsx";
 import MapGeolocation from "./controls/MapGeolocation.tsx";
+import DatePicker from "./controls/DatePicker.tsx";
+
+// Map Layers
+import FrostDepthLayer from "./layers/FrostDepthLayer.tsx";
+import SuperficialDepositsLayer from "./layers/SuperficialDepositsLayer.tsx";
+import SoilMoistureLayer from "./layers/NcWMSLayer.tsx";
 import NibioSoilMoistureLayer from "./layers/NibioSoilMoistureLayer.tsx";
 import ForestryRoadLayer from "./layers/ForestryRoadLayer.tsx";
 
 const MapContainer: React.FC = () => {
   const mapRef = useRef<HTMLDivElement>(null);
   const [mapInstance, setMapInstance] = useState<Map | null>(null);
+  const [date, setDate] = useState(new Date());
+  const layers = [
+    SuperficialDepositsLayer,
+    FrostDepthLayer,
+    SoilMoistureLayer,
+    NibioSoilMoistureLayer,
+    ForestryRoadLayer,
+  ];
 
   useLayoutEffect(() => {
     if (!mapRef.current) return;
@@ -48,16 +59,8 @@ const MapContainer: React.FC = () => {
           <MapScaleLine map={mapInstance} />
           <MapGeolocation map={mapInstance} />
           <BaseLayerSelector map={mapInstance} />
-          <SidebarLayerSelector
-            map={mapInstance}
-            layers={[
-              SuperficialDepositsLayer,
-              SoilMoistureLayer,
-              FrostDepthLayer,
-              NibioSoilMoistureLayer,
-              ForestryRoadLayer,
-            ]}
-          />
+          <DatePicker date={date} setDate={setDate} layers={layers} />
+          <SidebarLayerSelector map={mapInstance} layers={layers} />
         </>
       )}
     </div>
