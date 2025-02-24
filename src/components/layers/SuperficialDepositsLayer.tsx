@@ -6,8 +6,10 @@ const SuperficialDepositsLayer = new ImageLayer({
   opacity: 0.75,
   visible: false, // Set default visibility to false
   source: new ImageWMS({
-    url: "https://geo.ngu.no/mapserver/LosmasserWMS2?request=GetCapabilities&service=WMS",
+    url: "https://geo.ngu.no/mapserver/LosmasserWMS2",
     params: {
+      SERVICE: "WMS",
+      REQUEST: "GetMap",
       LAYERS: "Losmasse_Norge,Losmasse_flate,Losmasseflate_SOSI_kode",
       VERSION: "1.3.0",
     },
