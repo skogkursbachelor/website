@@ -6,8 +6,10 @@ const NibioSoilMoistureLayer = new ImageLayer({
   opacity: 0.75,
   visible: false, // Set default visibility to false
   source: new ImageWMS({
-    url: "https://wms.nibio.no/cgi-bin/markfuktighetskart?request=GetCapabilities&service=WMS",
+    url: "https://wms.nibio.no/cgi-bin/markfuktighetskart",
     params: {
+      SERVICE: "WMS",
+      REQUEST: "GetMap",
       LAYERS: "markfuktighetsklasser",
       VERSION: "1.3.0",
     },

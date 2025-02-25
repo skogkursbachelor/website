@@ -6,8 +6,10 @@ const ForestryRoadLayer = new ImageLayer({
   opacity: 0.75,
   visible: false, // Set default visibility to false
   source: new ImageWMS({
-    url: "https://wms.geonorge.no/skwms1/wms.traktorveg_skogsbilveger?service=wms&request=getcapabilities",
+    url: "https://wms.geonorge.no/skwms1/wms.traktorveg_skogsbilveger",
     params: {
+      SERVICE: "WMS",
+      REQUEST: "GetMap",
       LAYERS: "skogsbilveg",
       VERSION: "1.3.0",
     },
