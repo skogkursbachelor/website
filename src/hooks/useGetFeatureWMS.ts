@@ -48,7 +48,6 @@ const useWMSFeatureQuery = (
             try {
               const response = await fetch(url);
               const text = await response.text();
-              console.log(text);
               return text;
             } catch (error) {
               console.error("Error fetching feature info:", error);
