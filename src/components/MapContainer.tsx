@@ -76,7 +76,7 @@ const MapContainer: React.FC = () => {
           {isOpen && position && (
             <Overlay
               isOpen={isOpen}
-              initialPosition={{ x: 100, y: 100 }}
+              initialPosition={{ x: 300, y: -150 }}
               onClose={() => setIsOpen(false)}
             >
               {features.length > 0 ? (

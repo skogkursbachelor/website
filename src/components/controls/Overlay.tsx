@@ -14,15 +14,12 @@ const Overlay: React.FC<Props> = ({
   children,
 }) => {
   const [position, setPosition] = useState(initialPosition);
-  const [size, setSize] = useState({ width: 300, height: 200 });
+  const [size, setSize] = useState({ width: 500, height: 200 });
   const [isDragging, setIsDragging] = useState(false);
   const [isResizing, setIsResizing] = useState(false);
 
-  const startPos = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
-  const startSize = useRef<{ width: number; height: number }>({
-    width: 300,
-    height: 200,
-  });
+  const startPos = useRef({ x: 0, y: 0 });
+  const startSize = useRef({ width: 500, height: 200 });
 
   const onMouseMove = useCallback(
     (e: MouseEvent) => {
@@ -62,7 +59,7 @@ const Overlay: React.FC<Props> = ({
     e.stopPropagation();
     setIsResizing(true);
     startPos.current = { x: e.clientX, y: e.clientY };
-    startSize.current = { width: size.width, height: size.height };
+    startSize.current = size;
   };
 
   useEffect(() => {
@@ -78,9 +75,7 @@ const Overlay: React.FC<Props> = ({
     setPosition(initialPosition);
   }, [initialPosition]);
 
-  if (!isOpen) {
-    return null;
-  }
+  if (!isOpen) return null;
 
   return (
     <div>
