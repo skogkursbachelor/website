@@ -20,6 +20,7 @@ import SoilMoistureLayer from "./layers/NcWMSLayer.tsx";
 import NibioSoilMoistureLayer from "./layers/NibioSoilMoistureLayer.tsx";
 import ForestryRoadLayer from "./layers/ForestryRoadLayer.tsx";
 import Overlay from "./controls/Overlay.tsx";
+import CopernicusSoilMoistureLayer from "./layers/CopernicusSoilMoistureLayer.tsx";
 
 const MapContainer: React.FC = () => {
   const mapRef = useRef<HTMLDivElement>(null);
@@ -33,6 +34,7 @@ const MapContainer: React.FC = () => {
     SoilMoistureLayer,
     NibioSoilMoistureLayer,
     ForestryRoadLayer,
+    CopernicusSoilMoistureLayer,
   ];
 
   // Initialize the map
