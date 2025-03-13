@@ -11,6 +11,11 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""),
       },
+      "/skogsbilveg": {
+        target: "https://wms.geonorge.no/skwms1/wms.traktorveg_skogsbilveger",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/skogsbilveg/, ""),
+      },
     },
   },
 });

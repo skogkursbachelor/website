@@ -1,21 +1,42 @@
-import ImageLayer from "ol/layer/Image";
-import ImageWMS from "ol/source/ImageWMS";
+import { GeoJSON } from "ol/format";
+import { Style, Stroke } from "ol/style";
+import { Vector } from "ol/layer";
+import VectorSource from "ol/source/Vector";
+import { tile } from "ol/loadingstrategy";
+import { createXYZ } from "ol/tilegrid";
 
-const ForestryRoadLayer = new ImageLayer({
-  properties: { title: "Skogsbilveger" },
-  opacity: 0.75,
-  visible: false, // Set default visibility to false
-  source: new ImageWMS({
-    url: "https://wms.geonorge.no/skwms1/wms.traktorveg_skogsbilveger",
-    params: {
-      SERVICE: "WMS",
-      REQUEST: "GetMap",
-      LAYERS: "skogsbilveg",
-      VERSION: "1.3.0",
-    },
-    ratio: 1,
-    serverType: "mapserver",
+// Define WFS parameters as variables
+const baseUrl = "http://localhost:5173/skogsbilveg";
+const service = "WFS";
+const version = "2.0.0";
+const request = "GetFeature";
+const typeName = "ms:skogsbilveg";
+const outputFormat = "geojson";
+const srsName = "EPSG:3857";
+
+// Create WFS source
+const forestryRoadSource = new VectorSource({
+  format: new GeoJSON(),
+  url: (extent) => {
+    const bbox = extent.join(",");
+    return `${baseUrl}?service=${service}&version=${version}&request=${request}&typeName=${typeName}&srsName=${srsName}&bbox=${bbox},${srsName}&outputFormat=${outputFormat}&startIndex=0&count=100000`;
+  },
+  strategy: tile(createXYZ({ tileSize: 512 })),
+});
+
+const roadStyle = new Style({
+  stroke: new Stroke({
+    color: "blue",
+    width: 2,
   }),
 });
 
-export default ForestryRoadLayer;
+const ForestryRoadsLayer = new Vector({
+  properties: { title: "Skogsbilveg" },
+  visible: false,
+  source: forestryRoadSource,
+  style: roadStyle,
+  minZoom: 9.5,
+});
+
+export default ForestryRoadsLayer;
