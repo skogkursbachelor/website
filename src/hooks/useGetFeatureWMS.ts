@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
 import ImageLayer from "ol/layer/Image";
 import { ImageWMS } from "ol/source";
+import VectorLayer from "ol/layer/Vector";
+import VectorSource from "ol/source/Vector";
+import Feature from "ol/Feature";
+import Geometry from "ol/geom/Geometry";
 import Map from "ol/Map";
 
 interface QueryResult {
@@ -12,7 +16,10 @@ interface QueryResult {
 
 const useWMSFeatureQuery = (
   map: Map | null,
-  layers: ImageLayer<ImageWMS>[]
+  layers: (
+    | ImageLayer<ImageWMS>
+    | VectorLayer<VectorSource<Feature<Geometry>>, Feature<Geometry>>
+  )[]
 ): QueryResult => {
   const [queryPosition, setQueryPosition] = useState<{
     x: number;

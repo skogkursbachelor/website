@@ -1,11 +1,18 @@
 import React from "react";
 import ImageLayer from "ol/layer/Image";
 import ImageWMS from "ol/source/ImageWMS";
+import VectorLayer from "ol/layer/Vector";
+import VectorSource from "ol/source/Vector";
+import Feature from "ol/Feature";
+import Geometry from "ol/geom/Geometry";
 
 interface Props {
   date: Date;
   setDate: (date: Date) => void;
-  layers: ImageLayer<ImageWMS>[];
+  layers: (
+    | ImageLayer<ImageWMS>
+    | VectorLayer<VectorSource<Feature<Geometry>>, Feature<Geometry>>
+  )[];
 }
 
 const DatePicker: React.FC<Props> = ({ layers, date, setDate }) => {
