@@ -1,4 +1,5 @@
 import { GeoJSON } from "ol/format";
+import { FeatureLike } from "ol/Feature";
 import { Style, Stroke } from "ol/style";
 import { Vector } from "ol/layer";
 import VectorSource from "ol/source/Vector";
@@ -24,12 +25,25 @@ const forestryRoadSource = new VectorSource({
   strategy: tile(createXYZ({ tileSize: 512 })),
 });
 
-const roadStyle = new Style({
-  stroke: new Stroke({
-    color: "blue",
-    width: 2,
-  }),
-});
+// Function to dynamically set style based on feature properties
+const roadStyle = (feature: FeatureLike) => {
+  const kommunenummer: number | undefined = feature.get("kommunenummer");
+
+  let color = "red"; // Default color
+
+  if (kommunenummer) {
+    if (kommunenummer >= 3401 && kommunenummer <= 3454) {
+      color = "blue";
+    }
+  }
+
+  return new Style({
+    stroke: new Stroke({
+      color: color,
+      width: 2,
+    }),
+  });
+};
 
 const ForestryRoadsLayer = new Vector({
   properties: { title: "Skogsbilveg" },
