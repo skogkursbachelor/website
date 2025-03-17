@@ -6,7 +6,7 @@ const FrostDepthLayer = new ImageLayer({
   opacity: 0.75,
   visible: false, // Set default visibility to false
   source: new ImageWMS({
-    url: "https://nve.geodataonline.no/arcgis/services/seNorgeGrid_png/ImageServer/WMSServer",
+    url: import.meta.env.VITE_FROSTDEPTH_URL,
     params: {
       SERVICE: "WMS",
       REQUEST: "GetMap",

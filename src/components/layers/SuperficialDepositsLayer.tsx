@@ -6,7 +6,7 @@ const SuperficialDepositsLayer = new ImageLayer({
   opacity: 0.75,
   visible: false, // Set default visibility to false
   source: new ImageWMS({
-    url: "https://geo.ngu.no/mapserver/LosmasserWMS2",
+    url: import.meta.env.VITE_SUPERFICIALDEPOSITS_URL,
     params: {
       SERVICE: "WMS",
       REQUEST: "GetMap",

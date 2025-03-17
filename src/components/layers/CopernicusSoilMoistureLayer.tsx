@@ -6,7 +6,7 @@ const CopernicusSoilMoistureLayer = new ImageLayer({
   opacity: 0.75,
   visible: false, // Set default visibility to false
   source: new ImageWMS({
-    url: "https://european-flood.emergency.copernicus.eu/api/wms/",
+    url: import.meta.env.VITE_COPERNICUS_URL,
     params: {
       SERVICE: "WMS",
       REQUEST: "GetMap",

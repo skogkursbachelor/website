@@ -16,8 +16,6 @@ import useWMSFeatureQuery from "../hooks/useGetFeatureWMS.ts";
 // Map Layers
 import FrostDepthLayer from "./layers/FrostDepthLayer.tsx";
 import SuperficialDepositsLayer from "./layers/SuperficialDepositsLayer.tsx";
-import SoilMoistureLayer from "./layers/NcWMSLayer.tsx";
-import NibioSoilMoistureLayer from "./layers/NibioSoilMoistureLayer.tsx";
 import ForestryRoadLayer from "./layers/ForestryRoadLayer.tsx";
 import Overlay from "./controls/Overlay.tsx";
 import CopernicusSoilMoistureLayer from "./layers/CopernicusSoilMoistureLayer.tsx";
@@ -31,8 +29,8 @@ const MapContainer: React.FC = () => {
   const layers = [
     SuperficialDepositsLayer,
     FrostDepthLayer,
-    SoilMoistureLayer,
-    NibioSoilMoistureLayer,
+    // SoilMoistureLayer,
+    // NibioSoilMoistureLayer,
     ForestryRoadLayer,
     CopernicusSoilMoistureLayer,
   ];
