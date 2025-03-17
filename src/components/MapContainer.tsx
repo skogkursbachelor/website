@@ -18,7 +18,9 @@ import FrostDepthLayer from "./layers/FrostDepthLayer.tsx";
 import SuperficialDepositsLayer from "./layers/SuperficialDepositsLayer.tsx";
 import SoilMoistureLayer from "./layers/NcWMSLayer.tsx";
 import NibioSoilMoistureLayer from "./layers/NibioSoilMoistureLayer.tsx";
-import ForestryRoadLayer from "./layers/ForestryRoadLayer.tsx";
+import ForestryRoadLayer, {
+  setHoveredFeature,
+} from "./layers/ForestryRoadLayer.tsx";
 import Overlay from "./controls/Overlay.tsx";
 import CopernicusSoilMoistureLayer from "./layers/CopernicusSoilMoistureLayer.tsx";
 
@@ -48,9 +50,16 @@ const MapContainer: React.FC = () => {
         zoom: 5,
       }),
       controls: [], // Disable default controls
+      layers: layers,
     });
 
     setMapInstance(map);
+
+    // Pointer move event for hover effect
+    map.on("pointermove", (event) => {
+      const feature = map.forEachFeatureAtPixel(event.pixel, (feat) => feat);
+      setHoveredFeature(feature || null);
+    });
 
     return () => map.setTarget(undefined);
   }, []); // Empty dependency array ensures it runs once when the component mounts

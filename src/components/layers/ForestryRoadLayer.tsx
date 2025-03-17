@@ -1,7 +1,7 @@
 import { GeoJSON } from "ol/format";
 import { FeatureLike } from "ol/Feature";
 import { Style, Stroke } from "ol/style";
-import { Vector } from "ol/layer";
+import { Vector as VectorLayer } from "ol/layer";
 import VectorSource from "ol/source/Vector";
 import { tile } from "ol/loadingstrategy";
 import { createXYZ } from "ol/tilegrid";
@@ -25,29 +25,35 @@ const forestryRoadSource = new VectorSource({
   strategy: tile(createXYZ({ tileSize: 512 })),
 });
 
-// Function to dynamically set style based on feature properties
-const roadStyle = (feature: FeatureLike) => {
+let hoveredFeature: FeatureLike | null = null;
+
+// Function to dynamically set style based on feature properties and hover state
+export const roadStyle = (feature: FeatureLike) => {
   const kommunenummer: number | undefined = feature.get("kommunenummer");
 
   let color = "red"; // Default color
-
-  if (kommunenummer) {
-    if (kommunenummer >= 3401 && kommunenummer <= 3454) {
-      color = "blue";
-    }
+  if (kommunenummer && kommunenummer >= 3401 && kommunenummer <= 3454) {
+    color = "blue";
   }
+
+  const width = feature === hoveredFeature ? 5 : 2; // Increase width on hover
 
   return new Style({
     stroke: new Stroke({
       color: color,
-      width: 2,
+      width: width,
     }),
   });
 };
 
-const ForestryRoadsLayer = new Vector({
+export const setHoveredFeature = (feature: FeatureLike | null) => {
+  hoveredFeature = feature;
+  forestryRoadSource.changed(); // Trigger re-render
+};
+
+const ForestryRoadsLayer = new VectorLayer({
   properties: { title: "Skogsbilveg" },
-  visible: false,
+  visible: true,
   source: forestryRoadSource,
   style: roadStyle,
   minZoom: 9.5,
