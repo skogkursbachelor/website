@@ -12,7 +12,7 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api/, ""),
       },
       "/skogsbilveg": {
-        target: "https://wms.geonorge.no/skwms1/wms.traktorveg_skogsbilveger",
+        target: "http://localhost:8080/api/v1/forestryroads",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/skogsbilveg/, ""),
       },

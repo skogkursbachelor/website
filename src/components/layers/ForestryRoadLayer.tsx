@@ -27,19 +27,15 @@ const forestryRoadSource = new VectorSource({
 
 // Function to dynamically set style based on feature properties
 const roadStyle = (feature: FeatureLike) => {
-  const kommunenummer: number | undefined = feature.get("kommunenummer");
+  let farge: number[] | undefined = feature.get("farge");
 
-  let color = "red"; // Default color
-
-  if (kommunenummer) {
-    if (kommunenummer >= 3401 && kommunenummer <= 3454) {
-      color = "blue";
+    if (!farge) {
+        farge = [255, 0, 255];
     }
-  }
 
   return new Style({
     stroke: new Stroke({
-      color: color,
+      color: farge,
       width: 2,
     }),
   });
