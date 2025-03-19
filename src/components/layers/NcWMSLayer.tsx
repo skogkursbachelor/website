@@ -12,9 +12,9 @@ const SoilMoistureLayer = new ImageLayer({
   source: new ImageWMS({
     url: import.meta.env.VITE_NCWMS_URL,
     params: {
-      item: "layerDetails",
-      layers: "1/sm",
-      styles: "raster/default",
+      ITEM: "layerDetails",
+      LAYERS: "1/sm",
+      STYLE: "raster/default",
       TIME: `${new Date().toISOString().split("T")[0]}`,
       EXCEPTIONS: "BLANK",
     },

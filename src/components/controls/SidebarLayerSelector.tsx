@@ -2,27 +2,41 @@ import React, { useEffect, useState } from "react";
 import { Map } from "ol";
 import ImageLayer from "ol/layer/Image";
 import ImageWMS from "ol/source/ImageWMS";
+import VectorLayer from "ol/layer/Vector";
+import VectorSource from "ol/source/Vector";
+import Feature from "ol/Feature";
+import Geometry from "ol/geom/Geometry";
 
-interface Props {
+interface SidebarProps {
   map: Map;
-  layers: ImageLayer<ImageWMS>[];
+  layers: (
+    | ImageLayer<ImageWMS>
+    | VectorLayer<VectorSource<Feature<Geometry>>, Feature<Geometry>>
+  )[];
+  setLayerSidebarOpen: (isOpen: boolean) => void;
 }
 
-const SidebarLayerSelector: React.FC<Props> = ({ map, layers }) => {
+const SidebarLayerSelector: React.FC<SidebarProps> = ({
+  map,
+  layers,
+  setLayerSidebarOpen,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    setLayerSidebarOpen(isOpen);
+  }, [isOpen, setLayerSidebarOpen]);
+
+  const toggleSidebar = () => {
+    setIsOpen((prev) => !prev);
+  };
 
   return (
     <div>
-      {/* Button to toggle sidebar visibility */}
-      <button
-        className="sidebar-toggle-button"
-        onClick={() => setIsOpen(!isOpen)}
-      >
+      <button className="layer-sidebar-toggle-button" onClick={toggleSidebar}>
         {isOpen ? "Skjul Kartvalg" : "Vis Kartvalg"}
       </button>
-
-      {/* Sidebar */}
-      <div className={`sidebar ${isOpen ? "open" : "closed"}`}>
+      <div className={`layer-sidebar ${isOpen ? "open" : "closed"}`}>
         <h3>Layer Controls</h3>
         <ToggleLayers map={map} layers={layers} />
       </div>
@@ -30,24 +44,28 @@ const SidebarLayerSelector: React.FC<Props> = ({ map, layers }) => {
   );
 };
 
-export default SidebarLayerSelector;
+interface ToggleLayerProps {
+  map: Map;
+  layers: (
+    | ImageLayer<ImageWMS>
+    | VectorLayer<VectorSource<Feature<Geometry>>, Feature<Geometry>>
+  )[];
+}
 
-const ToggleLayers: React.FC<Props> = ({ map, layers }) => {
-  // Track visibility for each layer
+const ToggleLayers: React.FC<ToggleLayerProps> = ({ map, layers }) => {
   const [visibility, setVisibility] = useState<boolean[]>(
     layers.map((layer) => layer.getVisible())
   );
 
-  // Add or remove layers when the map or layers change
   useEffect(() => {
-    if (!map || layers.length === 0) return;
-
+    // Add layers to map if not already added
     layers.forEach((layer) => {
       if (!map.getLayers().getArray().includes(layer)) {
         map.addLayer(layer);
       }
     });
 
+    // Cleanup function to remove layers when component unmounts
     return () => {
       layers.forEach((layer) => {
         if (map.getLayers().getArray().includes(layer)) {
@@ -57,20 +75,32 @@ const ToggleLayers: React.FC<Props> = ({ map, layers }) => {
     };
   }, [map, layers]);
 
-  // Toggle visibility of a layer
+  // Initialize visibility state when layers change
+  useEffect(() => {
+    setVisibility(layers.map((layer) => layer.getVisible()));
+  }, [layers]);
+
+  // Apply visibility changes to the actual layers
+  useEffect(() => {
+    layers.forEach((layer, index) => {
+      if (layer.getVisible() !== visibility[index]) {
+        // Use setTimeout to ensure this runs after React's render phase
+        setTimeout(() => {
+          layer.setVisible(visibility[index]);
+        }, 0);
+      }
+    });
+  }, [visibility, layers]);
+
+  // Toggle handler that only updates React state
   const toggleLayer = (index: number) => {
     setVisibility((prevVisibility) => {
       const newVisibility = [...prevVisibility];
       newVisibility[index] = !newVisibility[index];
-      layers[index].setVisible(newVisibility[index]);
       return newVisibility;
     });
   };
 
-  useEffect(() => {
-    // Update the visibility state if the layers change dynamically
-    setVisibility(layers.map((layer) => layer.getVisible()));
-  }, [layers]);
   return (
     <div className="layer-list">
       {layers.map((layer, index) => (
@@ -78,7 +108,7 @@ const ToggleLayers: React.FC<Props> = ({ map, layers }) => {
           <span>{layer.getProperties().title}</span>
           <input
             type="checkbox"
-            checked={visibility[index]}
+            checked={visibility[index] || false}
             onChange={() => toggleLayer(index)}
           />
         </label>
@@ -86,3 +116,5 @@ const ToggleLayers: React.FC<Props> = ({ map, layers }) => {
     </div>
   );
 };
+
+export default SidebarLayerSelector;

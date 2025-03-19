@@ -9,6 +9,7 @@ import MapOverview from "./controls/MapOverview.tsx";
 import MapScaleLine from "./controls/MapScaleLine.tsx";
 import BaseLayerSelector from "./controls/BaseLayerSelector.tsx";
 import SidebarLayerSelector from "./controls/SidebarLayerSelector.tsx";
+import SidebarLegendOverview from "./controls/SidebarLegendOverview.tsx";
 import MapGeolocation from "./controls/MapGeolocation.tsx";
 import DatePicker from "./controls/DatePicker.tsx";
 import useWMSFeatureQuery from "../hooks/useGetFeatureWMS.ts";
@@ -18,13 +19,17 @@ import FrostDepthLayer from "./layers/FrostDepthLayer.tsx";
 import SuperficialDepositsLayer from "./layers/SuperficialDepositsLayer.tsx";
 import SoilMoistureLayer from "./layers/NcWMSLayer.tsx";
 import NibioSoilMoistureLayer from "./layers/NibioSoilMoistureLayer.tsx";
-import ForestryRoadLayer from "./layers/ForestryRoadLayer.tsx";
+import ForestryRoadLayer, {
+  setHoveredFeature,
+} from "./layers/ForestryRoadLayer.tsx";
 import Overlay from "./controls/Overlay.tsx";
+import CopernicusSoilMoistureLayer from "./layers/CopernicusSoilMoistureLayer.tsx";
 
 const MapContainer: React.FC = () => {
   const mapRef = useRef<HTMLDivElement>(null);
   const [mapInstance, setMapInstance] = useState<Map | null>(null);
   const [date, setDate] = useState(new Date());
+  const [isLayerSidebarOpen, setIsLayerSidebarOpen] = useState(false);
 
   // Define layers
   const layers = [
@@ -33,6 +38,7 @@ const MapContainer: React.FC = () => {
     SoilMoistureLayer,
     NibioSoilMoistureLayer,
     ForestryRoadLayer,
+    CopernicusSoilMoistureLayer,
   ];
 
   // Initialize the map
@@ -46,9 +52,18 @@ const MapContainer: React.FC = () => {
         zoom: 5,
       }),
       controls: [], // Disable default controls
+      layers: layers,
     });
 
     setMapInstance(map);
+
+    // Pointer move event for hover effect
+    map.on("pointermove", (event) => {
+      const feature = map.forEachFeatureAtPixel(event.pixel, (feat) => feat, {
+        hitTolerance: 10,
+      });
+      setHoveredFeature(feature || null);
+    });
 
     return () => map.setTarget(undefined);
   }, []); // Empty dependency array ensures it runs once when the component mounts
@@ -71,7 +86,16 @@ const MapContainer: React.FC = () => {
           <MapGeolocation map={mapInstance} />
           <BaseLayerSelector map={mapInstance} />
           <DatePicker date={date} setDate={setDate} layers={layers} />
-          <SidebarLayerSelector map={mapInstance} layers={layers} />
+          <SidebarLayerSelector
+            map={mapInstance}
+            layers={layers}
+            setLayerSidebarOpen={setIsLayerSidebarOpen}
+          />
+          <SidebarLegendOverview
+            map={mapInstance}
+            layers={layers}
+            isLayerSidebarOpen={isLayerSidebarOpen}
+          />
 
           {isOpen && position && (
             <Overlay
