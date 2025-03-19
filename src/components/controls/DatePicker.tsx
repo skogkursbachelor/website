@@ -10,12 +10,12 @@ interface Props {
   date: Date;
   setDate: (date: Date) => void;
   layers: (
-    | ImageLayer<ImageWMS>
-    | VectorLayer<VectorSource<Feature<Geometry>>, Feature<Geometry>>
-  )[];
+      | ImageLayer<ImageWMS>
+      | VectorLayer<VectorSource<Feature<Geometry>>, Feature<Geometry>>
+      )[];
 }
 
-const DatePicker: React.FC<Props> = ({ layers, date, setDate }) => {
+const DatePicker: React.FC<Props> = ({layers, date, setDate}) => {
   const updateLayerDates = (newDate: Date) => {
     layers.forEach((layer) => {
       const source = layer.getSource();
@@ -26,6 +26,32 @@ const DatePicker: React.FC<Props> = ({ layers, date, setDate }) => {
             TIME: newDate.toISOString().split("T")[0],
           });
         }
+      } else if (source instanceof VectorSource) {
+        // Check valid extent
+        const extent = source.getExtent();
+        if (!extent || !extent.every((v) => isFinite(v))) {
+          console.warn("Invalid extent, skipping WFS update");
+          return;
+        }
+
+        // Update URL with new date
+        const originalUrl = source.getUrl();
+        if (typeof originalUrl === "function") {
+          source.setUrl((currentExtent) => {
+            const bbox = currentExtent ? currentExtent.join(",") : extent.join(",");
+            return originalUrl(currentExtent).replace(
+                /(&time=)[^&]*/,
+                `$1${newDate.toISOString()}`
+            ).replace(
+                /(&bbox=)[^&]*/,
+                `$1${bbox},EPSG:3857`
+            );
+          });
+        }
+
+        // Update roads layer
+        source.clear();
+        source.refresh();
       }
     });
   };
@@ -37,86 +63,86 @@ const DatePicker: React.FC<Props> = ({ layers, date, setDate }) => {
   };
 
   return (
-    <div className="date-picker">
-      {/* Previous year button */}
-      <button
-        className="date-picker-button"
-        onClick={() => {
-          const prevYear = new Date(date);
-          prevYear.setFullYear(prevYear.getFullYear() - 1);
-          handleDateChange(prevYear);
-        }}
-      >
-        {"<<<"}
-      </button>
+      <div className="date-picker">
+        {/* Previous year button */}
+        <button
+            className="date-picker-button"
+            onClick={() => {
+              const prevYear = new Date(date);
+              prevYear.setFullYear(prevYear.getFullYear() - 1);
+              handleDateChange(prevYear);
+            }}
+        >
+          {"<<<"}
+        </button>
 
-      {/* Previous week button */}
-      <button
-        className="date-picker-button"
-        onClick={() => {
-          const prevWeek = new Date(date);
-          prevWeek.setDate(prevWeek.getDate() - 7);
-          handleDateChange(prevWeek);
-        }}
-      >
-        {"<<"}
-      </button>
+        {/* Previous week button */}
+        <button
+            className="date-picker-button"
+            onClick={() => {
+              const prevWeek = new Date(date);
+              prevWeek.setDate(prevWeek.getDate() - 7);
+              handleDateChange(prevWeek);
+            }}
+        >
+          {"<<"}
+        </button>
 
-      {/* Previous day button */}
-      <button
-        className="date-picker-button"
-        onClick={() => {
-          const prevDay = new Date(date);
-          prevDay.setDate(prevDay.getDate() - 1);
-          handleDateChange(prevDay);
-        }}
-      >
-        {"<"}
-      </button>
+        {/* Previous day button */}
+        <button
+            className="date-picker-button"
+            onClick={() => {
+              const prevDay = new Date(date);
+              prevDay.setDate(prevDay.getDate() - 1);
+              handleDateChange(prevDay);
+            }}
+        >
+          {"<"}
+        </button>
 
-      {/* Date input */}
-      <input
-        type="date"
-        value={date.toISOString().split("T")[0]}
-        onChange={(e) => handleDateChange(new Date(e.target.value))}
-      />
+        {/* Date input */}
+        <input
+            type="date"
+            value={date.toISOString().split("T")[0]}
+            onChange={(e) => handleDateChange(new Date(e.target.value))}
+        />
 
-      {/* Next day button */}
-      <button
-        className="date-picker-button"
-        onClick={() => {
-          const nextDay = new Date(date);
-          nextDay.setDate(nextDay.getDate() + 1);
-          handleDateChange(nextDay);
-        }}
-      >
-        {">"}
-      </button>
+        {/* Next day button */}
+        <button
+            className="date-picker-button"
+            onClick={() => {
+              const nextDay = new Date(date);
+              nextDay.setDate(nextDay.getDate() + 1);
+              handleDateChange(nextDay);
+            }}
+        >
+          {">"}
+        </button>
 
-      {/* Next week button */}
-      <button
-        className="date-picker-button"
-        onClick={() => {
-          const nextWeek = new Date(date);
-          nextWeek.setDate(nextWeek.getDate() + 7);
-          handleDateChange(nextWeek);
-        }}
-      >
-        {">>"}
-      </button>
+        {/* Next week button */}
+        <button
+            className="date-picker-button"
+            onClick={() => {
+              const nextWeek = new Date(date);
+              nextWeek.setDate(nextWeek.getDate() + 7);
+              handleDateChange(nextWeek);
+            }}
+        >
+          {">>"}
+        </button>
 
-      {/* Next year button */}
-      <button
-        className="date-picker-button"
-        onClick={() => {
-          const nextYear = new Date(date);
-          nextYear.setFullYear(nextYear.getFullYear() + 1);
-          handleDateChange(nextYear);
-        }}
-      >
-        {">>>"}
-      </button>
-    </div>
+        {/* Next year button */}
+        <button
+            className="date-picker-button"
+            onClick={() => {
+              const nextYear = new Date(date);
+              nextYear.setFullYear(nextYear.getFullYear() + 1);
+              handleDateChange(nextYear);
+            }}
+        >
+          {">>>"}
+        </button>
+      </div>
   );
 };
 

@@ -20,21 +20,20 @@ const forestryRoadSource = new VectorSource({
   format: new GeoJSON(),
   url: (extent) => {
     const bbox = extent.join(",");
-    return `${baseUrl}?service=${service}&version=${version}&request=${request}&typeName=${typeName}&srsName=${srsName}&bbox=${bbox},${srsName}&outputFormat=${outputFormat}&startIndex=0&count=100000`;
+    const date = new Date(Date.now()).toISOString();
+    return `${baseUrl}?service=${service}&version=${version}&request=${request}&typeName=${typeName}&srsName=${srsName}&bbox=${bbox},${srsName}&outputFormat=${outputFormat}&startIndex=0&count=100000&time=${date}`;
   },
   strategy: tile(createXYZ({ tileSize: 512 })),
 });
 
 let hoveredFeature: FeatureLike | null = null;
-
-// Function to dynamically set style based on feature properties and hover state
+// Function to dynamically set style based on feature properties
 export const roadStyle = (feature: FeatureLike) => {
-  const kommunenummer: number | undefined = feature.get("kommunenummer");
+  let color: number[] | undefined = feature.get("farge");
 
-  let color = "red"; // Default color
-  if (kommunenummer && kommunenummer >= 3401 && kommunenummer <= 3454) {
-    color = "blue";
-  }
+    if (!color) {
+        color = [255, 0, 255];
+    }
 
   const width = feature === hoveredFeature ? 5 : 2; // Increase width on hover
 
@@ -53,7 +52,7 @@ export const setHoveredFeature = (feature: FeatureLike | null) => {
 
 const ForestryRoadsLayer = new VectorLayer({
   properties: { title: "Skogsbilveg" },
-  visible: true,
+  visible: false,
   source: forestryRoadSource,
   style: roadStyle,
   minZoom: 9.5,
