@@ -9,6 +9,7 @@ import MapOverview from "./controls/MapOverview.tsx";
 import MapScaleLine from "./controls/MapScaleLine.tsx";
 import BaseLayerSelector from "./controls/BaseLayerSelector.tsx";
 import SidebarLayerSelector from "./controls/SidebarLayerSelector.tsx";
+import SidebarLegendOverview from "./controls/SidebarLegendOverview.tsx";
 import MapGeolocation from "./controls/MapGeolocation.tsx";
 import DatePicker from "./controls/DatePicker.tsx";
 import useWMSFeatureQuery from "../hooks/useGetFeatureWMS.ts";
@@ -28,6 +29,7 @@ const MapContainer: React.FC = () => {
   const mapRef = useRef<HTMLDivElement>(null);
   const [mapInstance, setMapInstance] = useState<Map | null>(null);
   const [date, setDate] = useState(new Date());
+  const [isLayerSidebarOpen, setIsLayerSidebarOpen] = useState(false);
 
   // Define layers
   const layers = [
@@ -57,7 +59,9 @@ const MapContainer: React.FC = () => {
 
     // Pointer move event for hover effect
     map.on("pointermove", (event) => {
-      const feature = map.forEachFeatureAtPixel(event.pixel, (feat) => feat);
+      const feature = map.forEachFeatureAtPixel(event.pixel, (feat) => feat, {
+        hitTolerance: 10,
+      });
       setHoveredFeature(feature || null);
     });
 
@@ -82,7 +86,16 @@ const MapContainer: React.FC = () => {
           <MapGeolocation map={mapInstance} />
           <BaseLayerSelector map={mapInstance} />
           <DatePicker date={date} setDate={setDate} layers={layers} />
-          <SidebarLayerSelector map={mapInstance} layers={layers} />
+          <SidebarLayerSelector
+            map={mapInstance}
+            layers={layers}
+            setLayerSidebarOpen={setIsLayerSidebarOpen}
+          />
+          <SidebarLegendOverview
+            map={mapInstance}
+            layers={layers}
+            isLayerSidebarOpen={isLayerSidebarOpen}
+          />
 
           {isOpen && position && (
             <Overlay
