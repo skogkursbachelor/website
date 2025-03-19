@@ -54,27 +54,6 @@ const SidebarLegendOverview: React.FC<Props> = ({
     };
   }, [layers, updateVisibleLayers]); // Re-run if the layers list changes
 
-  // Construct legend URL helper function
-  const constructLegendUrl = (
-    source: ImageWMS,
-    layerName: string
-  ): string | null => {
-    const params = source.getParams();
-    // Extract necessary parameters
-    const service = params.SERVICE || "WMS";
-    const version = params.VERSION || "1.3.0";
-    const request = "GetLegendGraphic";
-    const format = "image/png";
-    const sldVersion = "1.1.0";
-    const crs = "EPSG:3857";
-    // Build the URL
-    const baseUrl = source.getUrl();
-    if (!baseUrl) return null;
-
-    const legendUrl = `${baseUrl}?SERVICE=${service}&VERSION=${version}&REQUEST=${request}&FORMAT=${format}&LAYER=${layerName}&SLD_VERSION=${sldVersion}&CRS=${crs}`;
-    return legendUrl;
-  };
-
   return (
     <div>
       <button className="legend-sidebar-toggle-button" onClick={toggleSidebar}>
@@ -88,30 +67,25 @@ const SidebarLegendOverview: React.FC<Props> = ({
         <h4>Tegnforklaring</h4>
         <div className="legend-list">
           {visibleLayers.map((layer, index) => {
-            const source = layer.getSource();
-            if (source instanceof ImageWMS) {
-              const params = source.getParams();
-              if (!params.LAYERS) {
-                return null;
-              }
-              // Split the layers in the LAYERS parameter into individual layers
-              const layersArray = params.LAYERS.split(",");
+            const legendUrls = layer.getProperties().legendUrls as Record<
+              string,
+              string
+            >;
+
+            if (legendUrls) {
               return (
                 <div key={index} className="legend-item">
-                  <h4>{layer.getProperties().title || "Unnamed Layer"}</h4>
-                  {layersArray.map((layerName: string, layerIndex: number) => {
-                    const legendUrl = constructLegendUrl(source, layerName);
-                    return (
-                      <div key={layerIndex}>
-                        {legendUrl && (
-                          <img
-                            src={legendUrl}
-                            alt={`Legend for ${layerName}`}
-                          />
-                        )}
+                  <h4>{layer.getProperties().title || "Kartlag"}</h4>
+                  {Object.entries(legendUrls).map(
+                    ([layerName, legendUrl], i) => (
+                      <div key={i}>
+                        <img
+                          src={legendUrl}
+                          alt={`Innholdsfortegnelse for ${layerName}`}
+                        />
                       </div>
-                    );
-                  })}
+                    )
+                  )}
                 </div>
               );
             }
