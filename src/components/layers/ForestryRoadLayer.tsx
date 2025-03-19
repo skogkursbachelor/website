@@ -20,7 +20,8 @@ const forestryRoadSource = new VectorSource({
   format: new GeoJSON(),
   url: (extent) => {
     const bbox = extent.join(",");
-    return `${baseUrl}?service=${service}&version=${version}&request=${request}&typeName=${typeName}&srsName=${srsName}&bbox=${bbox},${srsName}&outputFormat=${outputFormat}&startIndex=0&count=100000`;
+    const date = new Date(Date.now()).toISOString();
+    return `${baseUrl}?service=${service}&version=${version}&request=${request}&typeName=${typeName}&srsName=${srsName}&bbox=${bbox},${srsName}&outputFormat=${outputFormat}&startIndex=0&count=100000&time=${date}`;
   },
   strategy: tile(createXYZ({ tileSize: 512 })),
 });
