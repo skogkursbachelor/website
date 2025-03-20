@@ -39,6 +39,7 @@ const DatePicker: React.FC<Props> = ({layers, date, setDate}) => {
         if (typeof originalUrl === "function") {
           source.setUrl((currentExtent) => {
             const bbox = currentExtent ? currentExtent.join(",") : extent.join(",");
+            // @ts-expect-error only using one parameter
             return originalUrl(currentExtent).replace(
                 /(&time=)[^&]*/,
                 `$1${newDate.toISOString()}`
