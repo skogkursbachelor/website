@@ -5,6 +5,12 @@ import { Vector as VectorLayer } from "ol/layer";
 import VectorSource from "ol/source/Vector";
 import { tile } from "ol/loadingstrategy";
 import { createXYZ } from "ol/tilegrid";
+import {transformExtent} from "ol/proj";
+import {register} from "ol/proj/proj4";
+import proj69 from "proj4";
+
+proj69.defs("EPSG:25833","+proj=utm +zone=33 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs");
+register(proj69);
 
 // Define WFS parameters as variables
 const baseUrl = "http://localhost:5173/skogsbilveg";
@@ -13,17 +19,19 @@ const version = "2.0.0";
 const request = "GetFeature";
 const typeName = "ms:skogsbilveg";
 const outputFormat = "geojson";
-const srsName = "EPSG:3857";
+const srsName = "EPSG:25833";
 
 // Create WFS source
 const forestryRoadSource = new VectorSource({
   format: new GeoJSON(),
   url: (extent) => {
-    const bbox = extent.join(",");
+    const transformedExtent = transformExtent(extent, "EPSG:3857", "EPSG:25833");
+    const bbox = transformedExtent.join(",");
     const date = new Date(Date.now()).toISOString();
     return `${baseUrl}?service=${service}&version=${version}&request=${request}&typeName=${typeName}&srsName=${srsName}&bbox=${bbox},${srsName}&outputFormat=${outputFormat}&startIndex=0&count=100000&time=${date}`;
   },
-  strategy: tile(createXYZ({ tileSize: 512 })),
+  // TODO: find best strategy for this layer
+  strategy: tile(createXYZ({ tileSize: 3000 })),
 });
 
 let hoveredFeature: FeatureLike | null = null;
