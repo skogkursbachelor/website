@@ -34,7 +34,7 @@ const SidebarLayerSelector: React.FC<SidebarProps> = ({
   return (
     <div>
       <button className="layer-sidebar-toggle-button" onClick={toggleSidebar}>
-        {isOpen ? "Skjul Kartvalg" : "Vis Kartvalg"}
+        {"Kartvalg"}
       </button>
       <div className={`layer-sidebar ${isOpen ? "open" : "closed"}`}>
         <h3>Layer Controls</h3>

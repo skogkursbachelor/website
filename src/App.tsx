@@ -1,11 +1,11 @@
-import MapContainer from "./components/MapContainer";
+import AppLayout from "./components/layout/AppLayout";
 import "./styles/App.css";
 
 function App() {
   return (
     <>
       <div>
-        <MapContainer />
+        <AppLayout />
       </div>
     </>
   );
