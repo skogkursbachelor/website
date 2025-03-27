@@ -39,9 +39,9 @@ let hoveredFeature: FeatureLike | null = null;
 export const roadStyle = (feature: FeatureLike) => {
   let color: number[] | undefined = feature.get("farge");
 
-    if (!color) {
-        color = [255, 0, 255];
-    }
+  if (!color) {
+    color = [255, 0, 255];
+  }
 
   const width = feature === hoveredFeature ? 5 : 2; // Increase width on hover
 

@@ -57,7 +57,7 @@ const SidebarLegendOverview: React.FC<Props> = ({
   return (
     <div>
       <button className="legend-sidebar-toggle-button" onClick={toggleSidebar}>
-        {isLegendOpen ? "Skjul Tegnforklaring" : "Vis Tegnforklaring"}
+        {"Tegnforklaring"}
       </button>
       <div
         className={`legend-sidebar ${isLegendOpen ? "open" : "closed"} ${
