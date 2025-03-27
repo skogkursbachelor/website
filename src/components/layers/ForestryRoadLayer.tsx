@@ -3,10 +3,9 @@ import { FeatureLike } from "ol/Feature";
 import { Style, Stroke } from "ol/style";
 import { Vector as VectorLayer } from "ol/layer";
 import VectorSource from "ol/source/Vector";
-import { tile } from "ol/loadingstrategy";
-import { createXYZ } from "ol/tilegrid";
 import {transformExtent} from "ol/proj";
 import {register} from "ol/proj/proj4";
+import { bbox as bboxStrategy } from "ol/loadingstrategy";
 import proj69 from "proj4";
 
 proj69.defs("EPSG:25833","+proj=utm +zone=33 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs");
@@ -30,11 +29,12 @@ const forestryRoadSource = new VectorSource({
     const date = new Date(Date.now()).toISOString();
     return `${baseUrl}?service=${service}&version=${version}&request=${request}&typeName=${typeName}&srsName=${srsName}&bbox=${bbox},${srsName}&outputFormat=${outputFormat}&startIndex=0&count=100000&time=${date}`;
   },
-  // TODO: find best strategy for this layer
-  strategy: tile(createXYZ({ tileSize: 3000 })),
+
+  strategy: bboxStrategy,
 });
 
 let hoveredFeature: FeatureLike | null = null;
+
 // Function to dynamically set style based on feature properties
 export const roadStyle = (feature: FeatureLike) => {
   let color: number[] | undefined = feature.get("farge");
