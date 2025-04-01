@@ -12,7 +12,7 @@ proj69.defs("EPSG:25833","+proj=utm +zone=33 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0
 register(proj69);
 
 // Define WFS parameters as variables
-const baseUrl = import.meta.env.VITE_FORESTRYROADS_URL;
+const baseUrl = "http://localhost:3000/skogsbilveg";
 const service = "WFS";
 const version = "2.0.0";
 const request = "GetFeature";
