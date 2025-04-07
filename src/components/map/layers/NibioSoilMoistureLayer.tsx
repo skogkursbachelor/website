@@ -2,7 +2,7 @@ import ImageLayer from "ol/layer/Image";
 import ImageWMS from "ol/source/ImageWMS";
 
 const nibioSoilMoistureSource = new ImageWMS({
-  url: "https://wms.nibio.no/cgi-bin/markfuktighetskart",
+  url: `http://${window.location.hostname}:${import.meta.env.VITE_API_PORT}${import.meta.env.VITE_PROBABLESOILMOISTURE_URL}`,
   params: {
     SERVICE: "WMS",
     REQUEST: "GetMap",

@@ -2,7 +2,7 @@ import { Image as ImageLayer } from "ol/layer";
 import { ImageWMS } from "ol/source";
 
 const frostDepthSource = new ImageWMS({
-  url: "https://nve.geodataonline.no/arcgis/services/seNorgeGrid_png/ImageServer/WMSServer",
+  url: `http://${window.location.hostname}:${import.meta.env.VITE_API_PORT}${import.meta.env.VITE_FROSTDEPTH_URL}`,
   params: {
     SERVICE: "WMS",
     REQUEST: "GetMap",
