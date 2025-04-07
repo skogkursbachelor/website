@@ -22,7 +22,7 @@ const CopernicusSoilMoistureLayer = new ImageLayer({
     title: "Copernicus Jordfuktighet",
     legendUrls: {
       satSoilMoisture:
-          `http://${window.location.hostname}:${import.meta.env.VITE_API_PORT}${import.meta.env.VITE_COPERNICUS_URL}` + "/?request=GetLegend&layers=mapserver:satSoilMoisture&styles=default&width=80&height=50",
+          `http://${window.location.hostname}:${import.meta.env.VITE_API_PORT}${import.meta.env.VITE_COPERNICUS_URL}` + "?request=GetLegend&layers=mapserver:satSoilMoisture&styles=default&width=80&height=50",
     },
   },
   opacity: 0.75,

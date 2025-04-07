@@ -18,7 +18,7 @@ const NibioSoilMoistureLayer = new ImageLayer({
     title: "Markfuktigheter",
     legendUrls: {
       markfuktighetsklasser:
-        "https://wms.nibio.no/cgi-bin/markfuktighetskart?language=nor&version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=markfuktighetsklasser&format=image/png&STYLE=default",
+          `http://${window.location.hostname}:${import.meta.env.VITE_API_PORT}${import.meta.env.VITE_LEGEND_PROBABLESOILMOISTURE_URL}?language=nor&version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=markfuktighetsklasser&format=image/png&STYLE=default`,
     },
   },
   opacity: 0.75,

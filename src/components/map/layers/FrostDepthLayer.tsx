@@ -1,8 +1,8 @@
-import { Image as ImageLayer } from "ol/layer";
-import { ImageWMS } from "ol/source";
+import {Image as ImageLayer} from "ol/layer";
+import {ImageWMS} from "ol/source";
 
 const frostDepthSource = new ImageWMS({
-  url: `http://${window.location.hostname}:${import.meta.env.VITE_API_PORT}${import.meta.env.VITE_FROSTDEPTH_URL}`,
+  url: `http://${window.location.hostname}:${import.meta.env.VITE_API_PORT}${import.meta.env.VITE_SENORGEWMS_URL}`,
   params: {
     SERVICE: "WMS",
     REQUEST: "GetMap",
@@ -23,7 +23,7 @@ const FrostDepthLayer = new ImageLayer({
     title: "Teledyp",
     legendUrls: {
       gwb_frd:
-        "https://geodata-hosting-nve-prod-imagefiles.s3.eu-north-1.amazonaws.com/static/seNorgeGridLegend/gwb_frd.png",
+          `http://${window.location.hostname}:${import.meta.env.VITE_API_PORT}${import.meta.env.VITE_LEGEND_FROSTDEPTH_URL}`
     },
   },
   opacity: 0.75,

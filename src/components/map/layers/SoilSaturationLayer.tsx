@@ -1,8 +1,8 @@
-import { Image as ImageLayer } from "ol/layer";
-import { ImageWMS } from "ol/source";
+import {Image as ImageLayer} from "ol/layer";
+import {ImageWMS} from "ol/source";
 
 const soilSaturationSource = new ImageWMS({
-  url: "https://nve.geodataonline.no/arcgis/services/seNorgeGrid_png/ImageServer/WMSServer",
+  url: `http://${window.location.hostname}:${import.meta.env.VITE_API_PORT}${import.meta.env.VITE_SENORGEWMS_URL}`,
   params: {
     SERVICE: "WMS",
     REQUEST: "GetMap",
@@ -23,7 +23,7 @@ const SoilSaturationLayer = new ImageLayer({
     title: "Vannmetning i jord",
     legendUrls: {
       gwb_sssrel:
-        "https://geodata-hosting-nve-prod-imagefiles.s3.eu-north-1.amazonaws.com/static/seNorgeGridLegend/gwb_sssrel.png",
+          `http://${window.location.hostname}:${import.meta.env.VITE_API_PORT}${import.meta.env.VITE_LEGEND_SOILSATURATION_URL}`,
     },
   },
   opacity: 0.75,
