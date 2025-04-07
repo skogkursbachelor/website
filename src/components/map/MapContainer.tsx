@@ -1,7 +1,7 @@
-import { useLayoutEffect, useRef, useState } from "react";
+import {useLayoutEffect, useRef, useState} from "react";
 import Map from "ol/Map";
 import View from "ol/View";
-import { fromLonLat } from "ol/proj";
+import {fromLonLat} from "ol/proj";
 import "ol/ol.css";
 import BaseLayerGroup from "./layers/BaseLayerGroup.tsx";
 import MapZoom from "./controls/MapZoom.tsx";
@@ -12,7 +12,6 @@ import SidebarLayerSelector from "./controls/SidebarLayerSelector.tsx";
 import SidebarLegendOverview from "./controls/SidebarLegendOverview.tsx";
 import MapGeolocation from "./controls/MapGeolocation.tsx";
 import DatePicker from "./controls/DatePicker.tsx";
-import TresholdConfig from "./controls/ThresholdConfig.tsx";
 
 // Map Layers
 import FrostDepthLayer from "./layers/FrostDepthLayer.tsx";
@@ -76,31 +75,31 @@ const MapContainer: React.FC = () => {
   */
 
   return (
-    <div className="map-wrapper">
-      <div className="date-picker-container">
-        <DatePicker date={date} setDate={setDate} layers={layers} />
-      </div>
+      <div className="map-wrapper">
+        <div className="date-picker-container">
+          <DatePicker date={date} setDate={setDate} layers={layers}/>
+        </div>
 
-      <div ref={mapRef} className="map-container">
-        {mapInstance && (
-          <>
-            <BaseLayerGroup map={mapInstance} />
-            <MapZoom map={mapInstance} />
-            <MapOverview map={mapInstance} />
-            <MapScaleLine map={mapInstance} />
-            <MapGeolocation map={mapInstance} />
-            <BaseLayerSelector map={mapInstance} />
-            <SidebarLayerSelector
-              map={mapInstance}
-              layers={layers}
-              setLayerSidebarOpen={setIsLayerSidebarOpen}
-            />
-            <SidebarLegendOverview
-              map={mapInstance}
-              layers={layers}
-              isLayerSidebarOpen={isLayerSidebarOpen}
-            />
-            {/*
+        <div ref={mapRef} className="map-container">
+          {mapInstance && (
+              <>
+                <BaseLayerGroup map={mapInstance}/>
+                <MapZoom map={mapInstance}/>
+                <MapOverview map={mapInstance}/>
+                <MapScaleLine map={mapInstance}/>
+                <MapGeolocation map={mapInstance}/>
+                <BaseLayerSelector map={mapInstance}/>
+                <SidebarLayerSelector
+                    map={mapInstance}
+                    layers={layers}
+                    setLayerSidebarOpen={setIsLayerSidebarOpen}
+                />
+                <SidebarLegendOverview
+                    map={mapInstance}
+                    layers={layers}
+                    isLayerSidebarOpen={isLayerSidebarOpen}
+                />
+                {/*
             {isOpen && position && (
               <Overlay
                 isOpen={isOpen}
@@ -128,10 +127,10 @@ const MapContainer: React.FC = () => {
                 )}
               </Overlay>
             )}*/}
-          </>
-        )}
+              </>
+          )}
+        </div>
       </div>
-    </div>
   );
 };
 
