@@ -13,14 +13,16 @@ const BaseLayerGroup: React.FC<Props> = ({ map }) => {
     if (!map) return;
 
     const standardLayer = new TileLayer({
-      source: new OSM(),
+      source: new OSM({
+        url: `http://${window.location.hostname}:${import.meta.env.VITE_API_PORT}${import.meta.env.VITE_BASELAYER_URL}/std/{a-c}/{z}/{x}/{y}`,
+      }),
       visible: true, // Default visible layer
       properties: { title: "Standard", imageLocation: "/standardMap.png" },
     });
 
     const topoLayer = new TileLayer({
       source: new OSM({
-        url: "https://{a-c}.tile.opentopomap.org/{z}/{x}/{y}.png",
+        url: `http://${window.location.hostname}:${import.meta.env.VITE_API_PORT}${import.meta.env.VITE_BASELAYER_URL}/topo/{a-c}/{z}/{x}/{y}`,
       }),
       visible: false,
       properties: { title: "Terreng", imageLocation: "/topoMap.png" },
