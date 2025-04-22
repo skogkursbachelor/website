@@ -199,7 +199,7 @@ body {
   right: 0;
   width: 250px;
   height: 100%;
-  background: white;
+  background: #66b3ff;
   box-shadow: -1px 1 5px rgba(0, 0, 0, 0.3);
   padding: 15px;
   overflow-y: auto;
