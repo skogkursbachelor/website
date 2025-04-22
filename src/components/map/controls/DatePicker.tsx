@@ -10,12 +10,12 @@ interface Props {
   date: Date;
   setDate: (date: Date) => void;
   layers: (
-      | ImageLayer<ImageWMS>
-      | VectorLayer<VectorSource<Feature<Geometry>>, Feature<Geometry>>
-      )[];
+    | ImageLayer<ImageWMS>
+    | VectorLayer<VectorSource<Feature<Geometry>>, Feature<Geometry>>
+  )[];
 }
 
-const DatePicker: React.FC<Props> = ({layers, date, setDate}) => {
+const DatePicker: React.FC<Props> = ({ layers, date, setDate }) => {
   const updateLayerDates = (newDate: Date) => {
     layers.forEach((layer) => {
       const source = layer.getSource();
@@ -38,11 +38,13 @@ const DatePicker: React.FC<Props> = ({layers, date, setDate}) => {
         const originalUrl = source.getUrl();
         if (typeof originalUrl === "function") {
           source.setUrl((currentExtent, resolution, projection) => {
-            const bbox = currentExtent ? currentExtent.join(",") : extent.join(",");
+            const bbox = currentExtent
+              ? currentExtent.join(",")
+              : extent.join(",");
 
             return originalUrl(currentExtent, resolution, projection)
-                .replace(/(&time=)[^&]*/, `$1${newDate.toISOString()}`)
-                .replace(/(&bbox=)[^&]*/, `$1${bbox},EPSG:3857`);
+              .replace(/(&time=)[^&]*/, `$1${newDate.toISOString()}`)
+              .replace(/(&bbox=)[^&]*/, `$1${bbox},EPSG:3857`);
           });
         }
 
@@ -53,93 +55,113 @@ const DatePicker: React.FC<Props> = ({layers, date, setDate}) => {
     });
   };
 
+  const minDate = new Date("1970-01-01T00:00:00Z");
+  const maxDate = new Date(Date.now() + 9 * 24 * 60 * 60 * 1000); // 9 days in the future
+
   const handleDateChange = (newDate: Date) => {
-    // TODO: Validate date range, e.g. there is an error when choosing year 0
+    // Ensure date is valid and within range
+    if (isNaN(newDate.getTime()) || newDate < minDate || newDate > maxDate) {
+      console.warn("Invalid date selected:", newDate.toISOString());
+      return;
+    }
+
     setDate(newDate);
     updateLayerDates(newDate);
   };
 
   return (
-      <div className="date-picker">
-        {/* Previous year button */}
-        <button
-            className="date-picker-button"
-            onClick={() => {
-              const prevYear = new Date(date);
-              prevYear.setFullYear(prevYear.getFullYear() - 1);
-              handleDateChange(prevYear);
-            }}
-        >
-          {"<<<"}
-        </button>
+    <div className="date-picker">
+      {/* Previous year button */}
+      <button
+        className="date-picker-button"
+        onClick={() => {
+          const prevYear = new Date(date);
+          prevYear.setFullYear(prevYear.getFullYear() - 1);
+          handleDateChange(prevYear);
+        }}
+      >
+        {"<<<"}
+      </button>
 
-        {/* Previous week button */}
-        <button
-            className="date-picker-button"
-            onClick={() => {
-              const prevWeek = new Date(date);
-              prevWeek.setDate(prevWeek.getDate() - 7);
-              handleDateChange(prevWeek);
-            }}
-        >
-          {"<<"}
-        </button>
+      {/* Previous week button */}
+      <button
+        className="date-picker-button"
+        onClick={() => {
+          const prevWeek = new Date(date);
+          prevWeek.setDate(prevWeek.getDate() - 7);
+          handleDateChange(prevWeek);
+        }}
+      >
+        {"<<"}
+      </button>
 
-        {/* Previous day button */}
-        <button
-            className="date-picker-button"
-            onClick={() => {
-              const prevDay = new Date(date);
-              prevDay.setDate(prevDay.getDate() - 1);
-              handleDateChange(prevDay);
-            }}
-        >
-          {"<"}
-        </button>
+      {/* Previous day button */}
+      <button
+        className="date-picker-button"
+        onClick={() => {
+          const prevDay = new Date(date);
+          prevDay.setDate(prevDay.getDate() - 1);
+          handleDateChange(prevDay);
+        }}
+      >
+        {"<"}
+      </button>
 
-        {/* Date input */}
-        <input
-            type="date"
-            value={date.toISOString().split("T")[0]}
-            onChange={(e) => handleDateChange(new Date(e.target.value))}
-        />
+      {/* Date input */}
+      <input
+        type="date"
+        value={date.toISOString().split("T")[0]}
+        onChange={(e) => {
+          const value = e.target.value;
+          const parsed = new Date(value);
 
-        {/* Next day button */}
-        <button
-            className="date-picker-button"
-            onClick={() => {
-              const nextDay = new Date(date);
-              nextDay.setDate(nextDay.getDate() + 1);
-              handleDateChange(nextDay);
-            }}
-        >
-          {">"}
-        </button>
+          if (!value || isNaN(parsed.getTime())) {
+            console.warn("Ignored invalid date string:", value);
+            return;
+          }
 
-        {/* Next week button */}
-        <button
-            className="date-picker-button"
-            onClick={() => {
-              const nextWeek = new Date(date);
-              nextWeek.setDate(nextWeek.getDate() + 7);
-              handleDateChange(nextWeek);
-            }}
-        >
-          {">>"}
-        </button>
+          handleDateChange(parsed);
+        }}
+        min={minDate.toISOString().split("T")[0]}
+        max={maxDate.toISOString().split("T")[0]}
+      />
 
-        {/* Next year button */}
-        <button
-            className="date-picker-button"
-            onClick={() => {
-              const nextYear = new Date(date);
-              nextYear.setFullYear(nextYear.getFullYear() + 1);
-              handleDateChange(nextYear);
-            }}
-        >
-          {">>>"}
-        </button>
-      </div>
+      {/* Next day button */}
+      <button
+        className="date-picker-button"
+        onClick={() => {
+          const nextDay = new Date(date);
+          nextDay.setDate(nextDay.getDate() + 1);
+          handleDateChange(nextDay);
+        }}
+      >
+        {">"}
+      </button>
+
+      {/* Next week button */}
+      <button
+        className="date-picker-button"
+        onClick={() => {
+          const nextWeek = new Date(date);
+          nextWeek.setDate(nextWeek.getDate() + 7);
+          handleDateChange(nextWeek);
+        }}
+      >
+        {">>"}
+      </button>
+
+      {/* Next year button */}
+      <button
+        className="date-picker-button"
+        onClick={() => {
+          const nextYear = new Date(date);
+          nextYear.setFullYear(nextYear.getFullYear() + 1);
+          handleDateChange(nextYear);
+        }}
+      >
+        {">>>"}
+      </button>
+    </div>
   );
 };
 
