@@ -1,7 +1,7 @@
-import {useLayoutEffect, useRef, useState} from "react";
-import Map from "ol/Map";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { Map as OpenLayersMap } from "ol";
 import View from "ol/View";
-import {fromLonLat} from "ol/proj";
+import { fromLonLat } from "ol/proj";
 import "ol/ol.css";
 import BaseLayerGroup from "./layers/BaseLayerGroup.tsx";
 import MapZoom from "./controls/MapZoom.tsx";
@@ -22,12 +22,20 @@ import ForestryRoadLayer, {
 } from "./layers/ForestryRoadLayer.tsx";
 import CopernicusSoilMoistureLayer from "./layers/CopernicusSoilMoistureLayer.tsx";
 import SoilSaturationLayer from "./layers/SoilSaturationLayer.tsx";
+import { setThresholds } from "./layers/ForestryRoadLayer.tsx";
+import SidebarThresholdConfig from "./controls/SidebarThresholdConfig.tsx";
+import { superficialDepositTypes } from "../../constants/superficialDepositTypes.ts";
 
 const MapContainer: React.FC = () => {
   const mapRef = useRef<HTMLDivElement>(null);
-  const [mapInstance, setMapInstance] = useState<Map | null>(null);
+  const [mapInstance, setMapInstance] = useState<OpenLayersMap | null>(null);
   const [date, setDate] = useState(new Date());
   const [isLayerSidebarOpen, setIsLayerSidebarOpen] = useState(false);
+  const [isLegendSidebarOpen, setIsLegendSidebarOpen] = useState(false);
+  const [showThresholdConfig, setShowThresholdConfig] = useState(false);
+  const [thresholds, setThresholdsState] = useState<Map<number, number>>(() =>
+    createDefaultThresholds()
+  );
 
   // Define layers
   const layers = [
@@ -39,11 +47,23 @@ const MapContainer: React.FC = () => {
     CopernicusSoilMoistureLayer,
   ];
 
+  function createDefaultThresholds(): Map<number, number> {
+    const map = new Map<number, number>();
+    superficialDepositTypes.forEach((type) => {
+      map.set(type.code, 75);
+    });
+    return map;
+  }
+
+  useEffect(() => {
+    setThresholds(thresholds);
+  }, [thresholds]);
+
   // Initialize the map
   useLayoutEffect(() => {
     if (!mapRef.current) return;
 
-    const map = new Map({
+    const map = new OpenLayersMap({
       target: mapRef.current,
       view: new View({
         center: fromLonLat([10, 59]),
@@ -75,31 +95,38 @@ const MapContainer: React.FC = () => {
   */
 
   return (
-      <div className="map-wrapper">
-        <div className="date-picker-container">
-          <DatePicker date={date} setDate={setDate} layers={layers}/>
-        </div>
+    <div className="map-wrapper">
+      <div className="date-picker-container">
+        <DatePicker date={date} setDate={setDate} layers={layers} />
+      </div>
 
-        <div ref={mapRef} className="map-container">
-          {mapInstance && (
-              <>
-                <BaseLayerGroup map={mapInstance}/>
-                <MapZoom map={mapInstance}/>
-                <MapOverview map={mapInstance}/>
-                <MapScaleLine map={mapInstance}/>
-                <MapGeolocation map={mapInstance}/>
-                <BaseLayerSelector map={mapInstance}/>
-                <SidebarLayerSelector
-                    map={mapInstance}
-                    layers={layers}
-                    setLayerSidebarOpen={setIsLayerSidebarOpen}
-                />
-                <SidebarLegendOverview
-                    map={mapInstance}
-                    layers={layers}
-                    isLayerSidebarOpen={isLayerSidebarOpen}
-                />
-                {/*
+      <div ref={mapRef} className="map-container">
+        {mapInstance && (
+          <>
+            <BaseLayerGroup map={mapInstance} />
+            <MapZoom map={mapInstance} />
+            <MapOverview map={mapInstance} />
+            <MapScaleLine map={mapInstance} />
+            <MapGeolocation map={mapInstance} />
+            <BaseLayerSelector map={mapInstance} />
+            <SidebarThresholdConfig
+              thresholds={thresholds}
+              setThresholdsState={setThresholdsState}
+              isLayerSidebarOpen={isLayerSidebarOpen}
+              isLegendSidebarOpen={isLegendSidebarOpen}
+            />
+            <SidebarLayerSelector
+              map={mapInstance}
+              layers={layers}
+              setLayerSidebarOpen={setIsLayerSidebarOpen}
+            />
+            <SidebarLegendOverview
+              map={mapInstance}
+              layers={layers}
+              isLayerSidebarOpen={isLayerSidebarOpen}
+              setLegendSidebarOpen={setIsLegendSidebarOpen}
+            />
+            {/*
             {isOpen && position && (
               <Overlay
                 isOpen={isOpen}
@@ -127,10 +154,10 @@ const MapContainer: React.FC = () => {
                 )}
               </Overlay>
             )}*/}
-              </>
-          )}
-        </div>
+          </>
+        )}
       </div>
+    </div>
   );
 };
 

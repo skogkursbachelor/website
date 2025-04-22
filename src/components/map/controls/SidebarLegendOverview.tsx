@@ -14,14 +14,20 @@ interface Props {
     | VectorLayer<VectorSource<Feature<Geometry>>, Feature<Geometry>>
   )[];
   isLayerSidebarOpen: boolean;
+  setLegendSidebarOpen: (isOpen: boolean) => void;
 }
 
 const SidebarLegendOverview: React.FC<Props> = ({
   layers,
   isLayerSidebarOpen,
+  setLegendSidebarOpen,
 }) => {
   const [isLegendOpen, setIsLegendOpen] = useState(false);
   const [visibleLayers, setVisibleLayers] = useState<typeof layers>([]);
+
+  useEffect(() => {
+    setLegendSidebarOpen(isLegendOpen);
+  }, [isLegendOpen, setLegendSidebarOpen]);
 
   // Toggle sidebar open/closed
   const toggleSidebar = () => {
