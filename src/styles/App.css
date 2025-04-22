@@ -31,6 +31,15 @@ body {
   left: 0;
 }
 
+.ol-attribution a {
+  color: #0077cc;
+}
+
+.ol-attribution a:hover {
+  color: #0055aa;
+  text-decoration: underline;
+}
+
 .ol-zoom {
   position: absolute;
   top: 10px;
@@ -54,7 +63,7 @@ body {
 /* Base Layer Selector Styling */
 .base-layer-selector {
   position: absolute;
-  bottom: 5px;
+  bottom: 20px;
   right: 5px;
   z-index: 10;
   display: flex;
