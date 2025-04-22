@@ -47,8 +47,9 @@ const forestryRoadSource = new VectorSource({
     const date = new Date(Date.now()).toISOString();
     return `${baseUrl}?service=${service}&version=${version}&request=${request}&typeName=${typeName}&srsName=${srsName}&bbox=${bbox},${srsName}&outputFormat=${outputFormat}&startIndex=0&count=100000&time=${date}`;
   },
-
   strategy: bboxStrategy,
+  attributions:
+    'Kartdata: © <a href="https://www.kartverket.no">Kartverket</a>, <a href="https://www.geodata.no">Geodata</a>, Geovekst, kommuner, <a href="https://www.openstreetmap.org/copyright">OSM</a>, <a href="https://www.ngu.no">NGU</a> | Data: <a href="https://www.nve.no">NVE</a>, <a href="https://met.no">MET</a> | Kilder: <a href="https://www.senorge.no">SeNorge</a>',
 });
 
 let hoveredFeature: FeatureLike | null = null;

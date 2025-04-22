@@ -1,8 +1,10 @@
-import {Image as ImageLayer} from "ol/layer";
-import {ImageWMS} from "ol/source";
+import { Image as ImageLayer } from "ol/layer";
+import { ImageWMS } from "ol/source";
 
 const copernicusSoilMoistureSource = new ImageWMS({
-  url: `http://${window.location.hostname}:${import.meta.env.VITE_API_PORT}${import.meta.env.VITE_COPERNICUS_URL}`,
+  url: `http://${window.location.hostname}:${import.meta.env.VITE_API_PORT}${
+    import.meta.env.VITE_COPERNICUS_URL
+  }`,
   params: {
     SERVICE: "WMS",
     REQUEST: "GetMap",
@@ -15,6 +17,8 @@ const copernicusSoilMoistureSource = new ImageWMS({
   },
   ratio: 1,
   serverType: "mapserver",
+  attributions:
+    'Kartdata: © <a href="https://european-flood.emergency.copernicus.eu/en">Copernicus</a>',
 });
 
 const CopernicusSoilMoistureLayer = new ImageLayer({
@@ -22,7 +26,10 @@ const CopernicusSoilMoistureLayer = new ImageLayer({
     title: "Copernicus Jordfuktighet",
     legendUrls: {
       satSoilMoisture:
-          `http://${window.location.hostname}:${import.meta.env.VITE_API_PORT}${import.meta.env.VITE_COPERNICUS_URL}` + "?request=GetLegend&layers=mapserver:satSoilMoisture&styles=default&width=80&height=50",
+        `http://${window.location.hostname}:${import.meta.env.VITE_API_PORT}${
+          import.meta.env.VITE_COPERNICUS_URL
+        }` +
+        "?request=GetLegend&layers=mapserver:satSoilMoisture&styles=default&width=80&height=50",
     },
   },
   opacity: 0.75,

@@ -25,6 +25,7 @@ import SoilSaturationLayer from "./layers/SoilSaturationLayer.tsx";
 import { setThresholds } from "./layers/ForestryRoadLayer.tsx";
 import SidebarThresholdConfig from "./controls/SidebarThresholdConfig.tsx";
 import { superficialDepositTypes } from "../../constants/superficialDepositTypes.ts";
+import Attribution from "ol/control/Attribution";
 
 const MapContainer: React.FC = () => {
   const mapRef = useRef<HTMLDivElement>(null);
@@ -62,13 +63,17 @@ const MapContainer: React.FC = () => {
   useLayoutEffect(() => {
     if (!mapRef.current) return;
 
+    const attribution = new Attribution({
+      collapsible: false,
+    });
+
     const map = new OpenLayersMap({
       target: mapRef.current,
       view: new View({
         center: fromLonLat([10, 59]),
         zoom: 5,
       }),
-      controls: [], // Disable default controls
+      controls: [attribution],
       layers: layers,
     });
 

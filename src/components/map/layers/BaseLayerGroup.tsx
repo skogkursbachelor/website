@@ -14,7 +14,11 @@ const BaseLayerGroup: React.FC<Props> = ({ map }) => {
 
     const standardLayer = new TileLayer({
       source: new OSM({
-        url: `http://${window.location.hostname}:${import.meta.env.VITE_API_PORT}${import.meta.env.VITE_BASELAYER_URL}/std/{a-c}/{z}/{x}/{y}`,
+        url: `http://${window.location.hostname}:${
+          import.meta.env.VITE_API_PORT
+        }${import.meta.env.VITE_BASELAYER_URL}/std/{a-c}/{z}/{x}/{y}`,
+        attributions:
+          '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap-bidragsytere</a>',
       }),
       visible: true, // Default visible layer
       properties: { title: "Standard", imageLocation: "/standardMap.png" },
@@ -22,7 +26,11 @@ const BaseLayerGroup: React.FC<Props> = ({ map }) => {
 
     const topoLayer = new TileLayer({
       source: new OSM({
-        url: `http://${window.location.hostname}:${import.meta.env.VITE_API_PORT}${import.meta.env.VITE_BASELAYER_URL}/topo/{a-c}/{z}/{x}/{y}`,
+        url: `http://${window.location.hostname}:${
+          import.meta.env.VITE_API_PORT
+        }${import.meta.env.VITE_BASELAYER_URL}/topo/{a-c}/{z}/{x}/{y}`,
+        attributions:
+          'Kartdata: © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap-bidragsytere</a>, SRTM | Kartstil: © <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)',
       }),
       visible: false,
       properties: { title: "Terreng", imageLocation: "/topoMap.png" },
