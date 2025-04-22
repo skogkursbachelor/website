@@ -1,0 +1,39 @@
+// Good trafficability is represented by green color
+const green = [0, 255, 0];
+
+// Yellow indicates caution, meaning the trafficability is moderate
+const yellow = [255, 255, 0];
+
+// Red indicates poor trafficability
+const red = [255, 0, 0];
+
+/**
+ * Determines the color of a road based on frost depth and water saturation.
+ * The colors are either green (good trafficability), yellow (moderate trafficability), or red (poor trafficability).
+ * @param frostDepth - The depth of frost in cm.
+ * @param frostDepthThreshold - The threshold for frost depth (default is 10 cm).
+ * @param waterSaturation - The percentage of water saturation.
+ * @returns An array representing the RGB color for trafficability.
+ */
+function getTrafficabilityColor(
+  frostDepth: number,
+  frostDepthThreshold = 10,
+  waterSaturation: number,
+  waterSaturationThreshold = 75
+): number[] {
+  let color = green;
+
+  // If frost depth is above the threshold, trafficability is always good
+  if (frostDepth < frostDepthThreshold) {
+    // Check if the water saturation is above the thresholds for each superficial deposit type
+    if (waterSaturation >= waterSaturationThreshold) {
+      color = red;
+    } else if (waterSaturation >= waterSaturationThreshold - 10) {
+      color = yellow;
+    }
+  }
+
+  return color;
+}
+
+export { getTrafficabilityColor };

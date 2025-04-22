@@ -3,16 +3,30 @@ import { FeatureLike } from "ol/Feature";
 import { Style, Stroke } from "ol/style";
 import { Vector as VectorLayer } from "ol/layer";
 import VectorSource from "ol/source/Vector";
-import {transformExtent} from "ol/proj";
-import {register} from "ol/proj/proj4";
+import { transformExtent } from "ol/proj";
+import { register } from "ol/proj/proj4";
 import { bbox as bboxStrategy } from "ol/loadingstrategy";
 import proj69 from "proj4";
+import { getTrafficabilityColor } from "../../../utils/trafficability";
 
-proj69.defs("EPSG:25833","+proj=utm +zone=33 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs");
+proj69.defs(
+  "EPSG:25833",
+  "+proj=utm +zone=33 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs"
+);
 register(proj69);
 
+let currentThresholds = new Map<number, number>();
+
+export const setThresholds = (thresholdMap: Map<number, number>) => {
+  currentThresholds = thresholdMap;
+  forestryRoadSource.changed();
+  console.log("Thresholds updated:", currentThresholds);
+};
+
 // Define WFS parameters as variables
-const baseUrl = `http://${window.location.hostname}:${import.meta.env.VITE_API_PORT}${import.meta.env.VITE_FORESTRYROADS_URL}`
+const baseUrl = `http://${window.location.hostname}:${
+  import.meta.env.VITE_API_PORT
+}${import.meta.env.VITE_FORESTRYROADS_URL}`;
 const service = "WFS";
 const version = "2.0.0";
 const request = "GetFeature";
@@ -24,7 +38,11 @@ const srsName = "EPSG:25833";
 const forestryRoadSource = new VectorSource({
   format: new GeoJSON(),
   url: (extent) => {
-    const transformedExtent = transformExtent(extent, "EPSG:3857", "EPSG:25833");
+    const transformedExtent = transformExtent(
+      extent,
+      "EPSG:3857",
+      "EPSG:25833"
+    );
     const bbox = transformedExtent.join(",");
     const date = new Date(Date.now()).toISOString();
     return `${baseUrl}?service=${service}&version=${version}&request=${request}&typeName=${typeName}&srsName=${srsName}&bbox=${bbox},${srsName}&outputFormat=${outputFormat}&startIndex=0&count=100000&time=${date}`;
@@ -36,14 +54,37 @@ const forestryRoadSource = new VectorSource({
 let hoveredFeature: FeatureLike | null = null;
 
 // Function to dynamically set style based on feature properties
-export const roadStyle = (feature: FeatureLike) => {
-  let color: number[] | undefined = feature.get("farge");
+const roadStyle = (feature: FeatureLike) => {
+  const frostDepth = feature.get("teledybde");
+  const soilSaturation = feature.get("vannmetning");
+  const depositType = feature.get("Løsmassekoder");
+  //const soilTemperature = feature.get("Jordtemperatur54cm");
 
-  if (!color) {
-    color = [255, 0, 255];
-  }
+  const threshold = currentThresholds.get(depositType) ?? 75;
 
-  const width = feature === hoveredFeature ? 5 : 2; // Increase width on hover
+  const color = getTrafficabilityColor(
+    frostDepth,
+    10,
+    soilSaturation,
+    threshold
+  );
+
+  console.log(
+    "Feature properties:",
+    "frost:",
+    frostDepth,
+    "watersat:",
+    soilSaturation,
+    "threshold:",
+    threshold,
+    "depositType:",
+    depositType,
+    "Color:",
+    color
+  );
+
+  // Increase width on hover
+  const width = feature === hoveredFeature ? 5 : 2;
 
   return new Style({
     stroke: new Stroke({
