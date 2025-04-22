@@ -66,11 +66,13 @@ const SidebarTresholdConfig: React.FC<Props> = ({
           id="deposit-type-select"
           onChange={handleSelectChange}
         >
-          {superficialDepositTypes.map((type) => (
-            <option key={type.code} value={type.code}>
-              {type.name}
-            </option>
-          ))}
+          {superficialDepositTypes
+            .sort((a, b) => a.name.localeCompare(b.name)) // Sort alphabetically by name
+            .map((type) => (
+              <option key={type.code} value={type.code}>
+                {type.name}
+              </option>
+            ))}
         </select>
         <label htmlFor="soil-moisture-threshold">Jordfuktighetsgrense</label>
         <div className="range-container">
