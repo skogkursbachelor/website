@@ -32,7 +32,6 @@ const MapContainer: React.FC = () => {
   const [date, setDate] = useState(new Date());
   const [isLayerSidebarOpen, setIsLayerSidebarOpen] = useState(false);
   const [isLegendSidebarOpen, setIsLegendSidebarOpen] = useState(false);
-  const [showThresholdConfig, setShowThresholdConfig] = useState(false);
   const [thresholds, setThresholdsState] = useState<Map<number, number>>(() =>
     createDefaultThresholds()
   );
