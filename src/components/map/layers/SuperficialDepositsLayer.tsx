@@ -30,7 +30,7 @@ const SuperficialDepositsLayer = new ImageLayer({
         import.meta.env.VITE_API_PORT
       }${
         import.meta.env.VITE_LEGEND_SUPERFICIALDEPOSITS_URL
-      }?language=nor&version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=Losmasse_Norge&format=image/png&STYLE=default`,
+      }?language=nor&version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=Losmasseflate_N1000&format=image/png&STYLE=default`,
       Losmasse_flate: `http://${window.location.hostname}:${
         import.meta.env.VITE_API_PORT
       }${
