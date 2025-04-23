@@ -58,7 +58,7 @@ const SidebarTresholdConfig: React.FC<Props> = ({
           }
         `}
       >
-        <h2>Grenseverdier</h2>
+        <h3>Grenseverdier</h3>
         <p>Sett grenseverdier for valgt løsmasse</p>
         <label htmlFor="deposit-type-select">Løsmassetype</label>
         <select

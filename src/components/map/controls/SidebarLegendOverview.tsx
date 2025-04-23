@@ -70,7 +70,7 @@ const SidebarLegendOverview: React.FC<Props> = ({
           isLegendOpen && isLayerSidebarOpen ? "shifted" : ""
         }`}
       >
-        <h4>Tegnforklaring</h4>
+        <h3>Tegnforklaring</h3>
         <div className="legend-list">
           {visibleLayers.map((layer, index) => {
             const legendUrls = layer.getProperties().legendUrls as Record<

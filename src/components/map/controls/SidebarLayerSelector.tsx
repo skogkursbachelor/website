@@ -37,7 +37,7 @@ const SidebarLayerSelector: React.FC<SidebarProps> = ({
         {"Kartvalg"}
       </button>
       <div className={`layer-sidebar ${isOpen ? "open" : "closed"}`}>
-        <h3>Layer Controls</h3>
+        <h3>Kartvalg</h3>
         <ToggleLayers map={map} layers={layers} />
       </div>
     </div>
