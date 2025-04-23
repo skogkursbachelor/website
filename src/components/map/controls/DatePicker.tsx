@@ -77,6 +77,7 @@ const DatePicker: React.FC<Props> = ({ layers, date, setDate }) => {
       {/* Previous year button */}
       <button
         className="date-picker-button"
+        title="Gå ett år tilbake"
         onClick={() => {
           const prevYear = new Date(date);
           prevYear.setFullYear(prevYear.getFullYear() - 1);
@@ -89,6 +90,7 @@ const DatePicker: React.FC<Props> = ({ layers, date, setDate }) => {
       {/* Previous week button */}
       <button
         className="date-picker-button"
+        title="Gå en uke tilbake"
         onClick={() => {
           const prevWeek = new Date(date);
           prevWeek.setDate(prevWeek.getDate() - 7);
@@ -101,6 +103,7 @@ const DatePicker: React.FC<Props> = ({ layers, date, setDate }) => {
       {/* Previous day button */}
       <button
         className="date-picker-button"
+        title="Gå en dag tilbake"
         onClick={() => {
           const prevDay = new Date(date);
           prevDay.setDate(prevDay.getDate() - 1);
@@ -114,6 +117,7 @@ const DatePicker: React.FC<Props> = ({ layers, date, setDate }) => {
       <input
         type="date"
         value={date.toISOString().split("T")[0]}
+        title="Velg dato"
         onChange={(e) => {
           const value = e.target.value;
           const parsed = new Date(value);
@@ -132,6 +136,7 @@ const DatePicker: React.FC<Props> = ({ layers, date, setDate }) => {
       {/* Next day button */}
       <button
         className="date-picker-button"
+        title="Gå en dag frem"
         onClick={() => {
           const nextDay = new Date(date);
           nextDay.setDate(nextDay.getDate() + 1);
@@ -144,6 +149,7 @@ const DatePicker: React.FC<Props> = ({ layers, date, setDate }) => {
       {/* Next week button */}
       <button
         className="date-picker-button"
+        title="Gå en uke frem"
         onClick={() => {
           const nextWeek = new Date(date);
           nextWeek.setDate(nextWeek.getDate() + 7);
@@ -156,6 +162,7 @@ const DatePicker: React.FC<Props> = ({ layers, date, setDate }) => {
       {/* Next year button */}
       <button
         className="date-picker-button"
+        title="Gå ett år frem"
         onClick={() => {
           const nextYear = new Date(date);
           nextYear.setFullYear(nextYear.getFullYear() + 1);

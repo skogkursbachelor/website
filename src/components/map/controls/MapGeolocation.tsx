@@ -45,7 +45,11 @@ const GeolocationButton: React.FC<Props> = ({ map }) => {
   };
 
   return (
-    <button onClick={centerOnLocation} className="geolocation-button">
+    <button
+      onClick={centerOnLocation}
+      className="geolocation-button"
+      title="Gå til posisjon din"
+    >
       <img src="/geopin.png" width={40} />
     </button>
   );

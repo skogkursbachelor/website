@@ -18,6 +18,15 @@ const MapOverview: React.FC<Props> = ({ map }) => {
     });
     map.addControl(overview);
 
+    // Set the title for overview map
+    setTimeout(() => {
+      const overviewElement = document.querySelector(
+        ".ol-overviewmap button"
+      ) as HTMLElement;
+
+      if (overviewElement) overviewElement.title = "Oversiktskart";
+    }, 0);
+
     return () => {
       map.removeControl(overview);
     };

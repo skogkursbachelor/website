@@ -13,6 +13,19 @@ const MapZoom: React.FC<Props> = ({ map }) => {
     const zoomControl = new Zoom();
     map.addControl(zoomControl);
 
+    // Set the title for zoom buttons
+    setTimeout(() => {
+      const zoomInElement = document.querySelector(
+        ".ol-zoom-in"
+      ) as HTMLElement;
+      const zoomOutElement = document.querySelector(
+        ".ol-zoom-out"
+      ) as HTMLElement;
+
+      if (zoomInElement) zoomInElement.title = "Zoom inn";
+      if (zoomOutElement) zoomOutElement.title = "Zoom ut";
+    }, 0);
+
     return () => {
       map.removeControl(zoomControl);
     };

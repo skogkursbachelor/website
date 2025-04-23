@@ -52,13 +52,26 @@ const forestryRoadSource = new VectorSource({
     'Kartdata: © <a href="https://www.kartverket.no">Kartverket</a>, <a href="https://www.geodata.no">Geodata</a>, Geovekst, kommuner, <a href="https://www.openstreetmap.org/copyright">OSM</a>, <a href="https://www.ngu.no">NGU</a> | Data: <a href="https://www.nve.no">NVE</a>, <a href="https://met.no">MET</a> | Kilder: <a href="https://www.senorge.no">SeNorge</a>',
 });
 
+// Add id to features on load
+forestryRoadSource.on("addfeature", (e) => {
+  const feature = e.feature;
+  if (feature) {
+    if (!feature.getId()) {
+      const roadNumber = `${feature.get("kommunenummer")}-${feature.get(
+        "vegnummer"
+      )}-${feature.get("strekningnummer")}`;
+      feature.setId(`${roadNumber}`);
+    }
+  }
+});
+
 let hoveredFeature: FeatureLike | null = null;
 
 // Function to dynamically set style based on feature properties
 const roadStyle = (feature: FeatureLike) => {
   const frostDepth = feature.get("teledybde");
   const soilSaturation = feature.get("vannmetning");
-  const depositType = feature.get("Løsmassekoder");
+  const depositType = feature.get("løsmassekoder");
   //const soilTemperature = feature.get("Jordtemperatur54cm");
 
   const threshold = currentThresholds.get(depositType) ?? 75;
@@ -70,34 +83,28 @@ const roadStyle = (feature: FeatureLike) => {
     threshold
   );
 
-  console.log(
-    "Feature properties:",
-    "frost:",
-    frostDepth,
-    "watersat:",
-    soilSaturation,
-    "threshold:",
-    threshold,
-    "depositType:",
-    depositType,
-    "Color:",
-    color
-  );
-
   // Increase width on hover
-  const width = feature === hoveredFeature ? 5 : 2;
+  const width = feature === hoveredFeature ? 6 : 3;
 
-  return new Style({
-    stroke: new Stroke({
-      color: color,
-      width: width,
+  return [
+    new Style({
+      stroke: new Stroke({
+        color: color,
+        width: width,
+      }),
     }),
-  });
+  ];
 };
 
 export const setHoveredFeature = (feature: FeatureLike | null) => {
   hoveredFeature = feature;
   forestryRoadSource.changed(); // Trigger re-render
+  console.log(
+    "teledyp:",
+    feature?.get("teledybde"),
+    "vannmetning",
+    feature?.get("vannmetning")
+  );
 };
 
 const ForestryRoadsLayer = new VectorLayer({
