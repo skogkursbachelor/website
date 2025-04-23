@@ -6,6 +6,7 @@ import VectorSource from "ol/source/Vector";
 import Feature from "ol/Feature";
 import Geometry from "ol/geom/Geometry";
 import Chevron from "./Chevron";
+import ReturnIcon from "./Return";
 
 interface Props {
   date: Date;
@@ -24,7 +25,7 @@ const DatePicker: React.FC<Props> = ({ layers, date, setDate }) => {
         const params = source.getParams();
         if ("TIME" in params) {
           source.updateParams({
-            TIME: newDate.toISOString().split("T")[0],
+            TIME: newDate.toLocaleDateString("sv-SE"),
           });
         }
       } else if (source instanceof VectorSource) {
@@ -111,7 +112,7 @@ const DatePicker: React.FC<Props> = ({ layers, date, setDate }) => {
       {/* Date input */}
       <input
         type="date"
-        value={date.toISOString().split("T")[0]}
+        value={date.toLocaleDateString("sv-SE")}
         title="Velg dato"
         onChange={(e) => {
           const value = e.target.value;
@@ -124,8 +125,8 @@ const DatePicker: React.FC<Props> = ({ layers, date, setDate }) => {
 
           handleDateChange(parsed);
         }}
-        min={minDate.toISOString().split("T")[0]}
-        max={maxDate.toISOString().split("T")[0]}
+        min={minDate.toLocaleDateString("sv-SE")}
+        max={maxDate.toLocaleDateString("sv-SE")}
       />
 
       {/* Next day button */}
@@ -165,6 +166,19 @@ const DatePicker: React.FC<Props> = ({ layers, date, setDate }) => {
         }}
       >
         <Chevron direction="right" count={3} />
+      </button>
+
+      {/* Reset date button */}
+      <button
+        className="date-picker-button"
+        title="Tilbakestill til dagens dato"
+        onClick={() => {
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+          handleDateChange(today);
+        }}
+      >
+        <ReturnIcon color="white" />
       </button>
     </div>
   );
