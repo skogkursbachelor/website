@@ -56,7 +56,10 @@ const DatePicker: React.FC<Props> = ({ layers, date, setDate }) => {
   };
 
   const minDate = new Date("1970-01-01T00:00:00Z");
-  const maxDate = new Date(Date.now() + 9 * 24 * 60 * 60 * 1000); // 9 days in the future
+
+  // Set maxDate to 9 days into the future
+  const maxDate = new Date(new Date().setDate(new Date().getDate() + 9));
+  maxDate.setHours(23, 59, 59, 999);
 
   const handleDateChange = (newDate: Date) => {
     // Ensure date is valid and within range
