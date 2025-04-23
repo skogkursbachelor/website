@@ -58,8 +58,10 @@ const DatePicker: React.FC<Props> = ({ layers, date, setDate }) => {
   const maxDate = new Date(new Date().setDate(new Date().getDate() + 9));
   maxDate.setHours(23, 59, 59, 999);
 
+  const isValidDate = (date: Date) => date >= minDate && date <= maxDate;
+
   const handleDateChange = (newDate: Date) => {
-    if (isNaN(newDate.getTime()) || newDate < minDate || newDate > maxDate) {
+    if (isNaN(newDate.getTime()) || !isValidDate(newDate)) {
       console.warn("Invalid date selected:", newDate.toISOString());
       return;
     }
@@ -68,48 +70,56 @@ const DatePicker: React.FC<Props> = ({ layers, date, setDate }) => {
     updateLayerDates(newDate);
   };
 
+  const prevDay = new Date(date);
+  prevDay.setDate(prevDay.getDate() - 1);
+
+  const prevWeek = new Date(date);
+  prevWeek.setDate(prevWeek.getDate() - 7);
+
+  const prevYear = new Date(date);
+  prevYear.setFullYear(prevYear.getFullYear() - 1);
+
+  const nextDay = new Date(date);
+  nextDay.setDate(nextDay.getDate() + 1);
+
+  const nextWeek = new Date(date);
+  nextWeek.setDate(nextWeek.getDate() + 7);
+
+  const nextYear = new Date(date);
+  nextYear.setFullYear(nextYear.getFullYear() + 1);
+
   return (
     <div className="date-picker">
-      {/* Previous year button */}
       <button
         className="date-picker-button"
         title="Gå ett år tilbake"
-        onClick={() => {
-          const prevYear = new Date(date);
-          prevYear.setFullYear(prevYear.getFullYear() - 1);
-          handleDateChange(prevYear);
-        }}
+        onClick={() => handleDateChange(prevYear)}
+        disabled={!isValidDate(prevYear)}
+        style={{ cursor: !isValidDate(prevYear) ? "not-allowed" : "pointer" }}
       >
         <Chevron direction="left" count={3} />
       </button>
 
-      {/* Previous week button */}
       <button
         className="date-picker-button"
         title="Gå en uke tilbake"
-        onClick={() => {
-          const prevWeek = new Date(date);
-          prevWeek.setDate(prevWeek.getDate() - 7);
-          handleDateChange(prevWeek);
-        }}
+        onClick={() => handleDateChange(prevWeek)}
+        disabled={!isValidDate(prevWeek)}
+        style={{ cursor: !isValidDate(prevWeek) ? "not-allowed" : "pointer" }}
       >
         <Chevron direction="left" count={2} />
       </button>
 
-      {/* Previous day button */}
       <button
         className="date-picker-button"
         title="Gå en dag tilbake"
-        onClick={() => {
-          const prevDay = new Date(date);
-          prevDay.setDate(prevDay.getDate() - 1);
-          handleDateChange(prevDay);
-        }}
+        onClick={() => handleDateChange(prevDay)}
+        disabled={!isValidDate(prevDay)}
+        style={{ cursor: !isValidDate(prevDay) ? "not-allowed" : "pointer" }}
       >
         <Chevron direction="left" count={1} />
       </button>
 
-      {/* Date input */}
       <input
         type="date"
         value={date.toLocaleDateString("sv-SE")}
@@ -117,58 +127,46 @@ const DatePicker: React.FC<Props> = ({ layers, date, setDate }) => {
         onChange={(e) => {
           const value = e.target.value;
           const parsed = new Date(value);
-
           if (!value || isNaN(parsed.getTime())) {
             console.warn("Ignored invalid date string:", value);
             return;
           }
-
           handleDateChange(parsed);
         }}
         min={minDate.toLocaleDateString("sv-SE")}
         max={maxDate.toLocaleDateString("sv-SE")}
       />
 
-      {/* Next day button */}
       <button
         className="date-picker-button"
         title="Gå en dag frem"
-        onClick={() => {
-          const nextDay = new Date(date);
-          nextDay.setDate(nextDay.getDate() + 1);
-          handleDateChange(nextDay);
-        }}
+        onClick={() => handleDateChange(nextDay)}
+        disabled={!isValidDate(nextDay)}
+        style={{ cursor: !isValidDate(nextDay) ? "not-allowed" : "pointer" }}
       >
         <Chevron direction="right" count={1} />
       </button>
 
-      {/* Next week button */}
       <button
         className="date-picker-button"
         title="Gå en uke frem"
-        onClick={() => {
-          const nextWeek = new Date(date);
-          nextWeek.setDate(nextWeek.getDate() + 7);
-          handleDateChange(nextWeek);
-        }}
+        onClick={() => handleDateChange(nextWeek)}
+        disabled={!isValidDate(nextWeek)}
+        style={{ cursor: !isValidDate(nextWeek) ? "not-allowed" : "pointer" }}
       >
         <Chevron direction="right" count={2} />
       </button>
 
-      {/* Next year button */}
       <button
         className="date-picker-button"
         title="Gå ett år frem"
-        onClick={() => {
-          const nextYear = new Date(date);
-          nextYear.setFullYear(nextYear.getFullYear() + 1);
-          handleDateChange(nextYear);
-        }}
+        onClick={() => handleDateChange(nextYear)}
+        disabled={!isValidDate(nextYear)}
+        style={{ cursor: !isValidDate(nextYear) ? "not-allowed" : "pointer" }}
       >
         <Chevron direction="right" count={3} />
       </button>
 
-      {/* Reset date button */}
       <button
         className="date-picker-button"
         title="Tilbakestill til dagens dato"
