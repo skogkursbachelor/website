@@ -5,6 +5,7 @@ import VectorLayer from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
 import Feature from "ol/Feature";
 import Geometry from "ol/geom/Geometry";
+import Chevron from "./Chevron";
 
 interface Props {
   date: Date;
@@ -27,14 +28,12 @@ const DatePicker: React.FC<Props> = ({ layers, date, setDate }) => {
           });
         }
       } else if (source instanceof VectorSource) {
-        // Check valid extent
         const extent = source.getExtent();
         if (!extent?.every((v) => isFinite(v))) {
           console.warn("Invalid extent, skipping WFS update");
           return;
         }
 
-        // Update URL with new date
         const originalUrl = source.getUrl();
         if (typeof originalUrl === "function") {
           source.setUrl((currentExtent, resolution, projection) => {
@@ -48,7 +47,6 @@ const DatePicker: React.FC<Props> = ({ layers, date, setDate }) => {
           });
         }
 
-        // Update roads layer
         source.clear();
         source.refresh();
       }
@@ -56,13 +54,10 @@ const DatePicker: React.FC<Props> = ({ layers, date, setDate }) => {
   };
 
   const minDate = new Date("1970-01-01T00:00:00Z");
-
-  // Set maxDate to 9 days into the future
   const maxDate = new Date(new Date().setDate(new Date().getDate() + 9));
   maxDate.setHours(23, 59, 59, 999);
 
   const handleDateChange = (newDate: Date) => {
-    // Ensure date is valid and within range
     if (isNaN(newDate.getTime()) || newDate < minDate || newDate > maxDate) {
       console.warn("Invalid date selected:", newDate.toISOString());
       return;
@@ -84,7 +79,7 @@ const DatePicker: React.FC<Props> = ({ layers, date, setDate }) => {
           handleDateChange(prevYear);
         }}
       >
-        {"<<<"}
+        <Chevron direction="left" count={3} />
       </button>
 
       {/* Previous week button */}
@@ -97,7 +92,7 @@ const DatePicker: React.FC<Props> = ({ layers, date, setDate }) => {
           handleDateChange(prevWeek);
         }}
       >
-        {"<<"}
+        <Chevron direction="left" count={2} />
       </button>
 
       {/* Previous day button */}
@@ -110,7 +105,7 @@ const DatePicker: React.FC<Props> = ({ layers, date, setDate }) => {
           handleDateChange(prevDay);
         }}
       >
-        {"<"}
+        <Chevron direction="left" count={1} />
       </button>
 
       {/* Date input */}
@@ -143,7 +138,7 @@ const DatePicker: React.FC<Props> = ({ layers, date, setDate }) => {
           handleDateChange(nextDay);
         }}
       >
-        {">"}
+        <Chevron direction="right" count={1} />
       </button>
 
       {/* Next week button */}
@@ -156,7 +151,7 @@ const DatePicker: React.FC<Props> = ({ layers, date, setDate }) => {
           handleDateChange(nextWeek);
         }}
       >
-        {">>"}
+        <Chevron direction="right" count={2} />
       </button>
 
       {/* Next year button */}
@@ -169,7 +164,7 @@ const DatePicker: React.FC<Props> = ({ layers, date, setDate }) => {
           handleDateChange(nextYear);
         }}
       >
-        {">>>"}
+        <Chevron direction="right" count={3} />
       </button>
     </div>
   );

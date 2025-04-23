@@ -144,16 +144,27 @@ body {
 }
 
 .date-picker-button {
-  background: white;
-  height: 20px;
-  width: 40px;
+  background: #007bff;
+  height: 30px;
+  width: 30px;
   padding: 5px;
-  border: 1px solid #8f8f9d;
   border-radius: 5px;
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 10;
+}
+
+.date-picker-button:hover {
+  background: #0053ab;
+}
+
+.date-picker-button svg {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  padding: 0;
+  flex-shrink: 0;
 }
 
 .overlay {
@@ -290,6 +301,7 @@ body {
   overflow-y: auto;
   transition: transform 0.3s ease;
   z-index: 999;
+  color: white;
 }
 
 .legend-sidebar.closed {
@@ -355,7 +367,7 @@ body {
   padding: 15px;
   overflow-y: auto;
   transition: transform 0.3s ease;
-  z-index: 999;
+  z-index: 998;
 }
 
 .threshold-config-sidebar.closed {
@@ -453,20 +465,4 @@ input[type="range"] {
   font-size: 16px;
   font-weight: 500;
   color: white;
-}
-
-/* Dark Mode */
-@media (prefers-color-scheme: dark) {
-  .date-picker-button {
-    background: #2b2a33;
-    height: 20px;
-    width: 40px;
-    padding: 5px;
-    border: 1px solid #8f8f9d;
-    border-radius: 5px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 10;
-  }
 }
