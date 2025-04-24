@@ -151,8 +151,7 @@ const ToggleLayers: React.FC<ToggleLayerProps> = ({ map, layers }) => {
               readOnly
             />
           </button>
-          {layer.getProperties().title === "Skogsbilveg" ||
-          layer.getProperties().title === "Markfuktighet" ? (
+          {layer.getMinZoom() > 0 ? (
             <button
               className="zoom-to-layer-button"
               title="Zoom til synlig nivå"
