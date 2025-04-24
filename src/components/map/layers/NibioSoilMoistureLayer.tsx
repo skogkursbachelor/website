@@ -18,7 +18,7 @@ const nibioSoilMoistureSource = new ImageWMS({
 
 const NibioSoilMoistureLayer = new ImageLayer({
   properties: {
-    title: "Markfuktigheter",
+    title: "Markfuktighet",
     legendUrls: {
       markfuktighetsklasser: `http://${window.location.hostname}:${
         import.meta.env.VITE_API_PORT
@@ -30,6 +30,7 @@ const NibioSoilMoistureLayer = new ImageLayer({
   opacity: 0.75,
   visible: false, // Set default visibility to false
   source: nibioSoilMoistureSource,
+  minZoom: 14.76,
 });
 
 export default NibioSoilMoistureLayer;
