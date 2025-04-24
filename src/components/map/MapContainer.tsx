@@ -12,6 +12,12 @@ import SidebarLayerSelector from "./controls/SidebarLayerSelector.tsx";
 import SidebarLegendOverview from "./controls/SidebarLegendOverview.tsx";
 import MapGeolocation from "./controls/MapGeolocation.tsx";
 import DatePicker from "./controls/DatePicker.tsx";
+import { setThresholds } from "./layers/ForestryRoadLayer.tsx";
+import SidebarThresholdConfig from "./controls/SidebarThresholdConfig.tsx";
+import { superficialDepositTypes } from "../../constants/superficialDepositTypes.ts";
+import Attribution from "ol/control/Attribution";
+import QueryOverlay from "./controls/QueryOverlay.tsx";
+import { FeatureLike } from "ol/Feature";
 
 // Map Layers
 import FrostDepthLayer from "./layers/FrostDepthLayer.tsx";
@@ -22,19 +28,21 @@ import ForestryRoadLayer, {
 } from "./layers/ForestryRoadLayer.tsx";
 import CopernicusSoilMoistureLayer from "./layers/CopernicusSoilMoistureLayer.tsx";
 import SoilSaturationLayer from "./layers/SoilSaturationLayer.tsx";
-import { setThresholds } from "./layers/ForestryRoadLayer.tsx";
-import SidebarThresholdConfig from "./controls/SidebarThresholdConfig.tsx";
-import { superficialDepositTypes } from "../../constants/superficialDepositTypes.ts";
-import Attribution from "ol/control/Attribution";
+import { Coordinate } from "ol/coordinate";
 
 const MapContainer: React.FC = () => {
   const mapRef = useRef<HTMLDivElement>(null);
+
   const [mapInstance, setMapInstance] = useState<OpenLayersMap | null>(null);
   const [date, setDate] = useState(new Date());
   const [isLayerSidebarOpen, setIsLayerSidebarOpen] = useState(false);
   const [isLegendSidebarOpen, setIsLegendSidebarOpen] = useState(false);
   const [thresholds, setThresholdsState] = useState<Map<number, number>>(() =>
     createDefaultThresholds()
+  );
+  const [clickCoord, setClickCoord] = useState<Coordinate | null>(null);
+  const [clickedFeature, setClickedFeature] = useState<FeatureLike | null>(
+    null
   );
 
   // Define layers
@@ -87,16 +95,22 @@ const MapContainer: React.FC = () => {
       setHoveredFeature(feature || null);
     });
 
+    map.on("singleclick", (event) => {
+      const feature = map.forEachFeatureAtPixel(event.pixel, (feat) => feat, {
+        hitTolerance: 5,
+      });
+
+      if (feature && feature.get("layerId") === "forestryRoad") {
+        setClickCoord(event.coordinate);
+        setClickedFeature(feature);
+      } else {
+        setClickCoord(null);
+        setClickedFeature(null);
+      }
+    });
+
     return () => map.setTarget(undefined);
   }, []); // Empty dependency array ensures it runs once when the component mounts
-
-  /*
-  // Hook for querying WMS feature info
-  const { position, features, isOpen, setIsOpen } = useWMSFeatureQuery(
-    mapInstance,
-    layers
-  );
-  */
 
   return (
     <div className="map-wrapper">
@@ -130,34 +144,15 @@ const MapContainer: React.FC = () => {
               isLayerSidebarOpen={isLayerSidebarOpen}
               setLegendSidebarOpen={setIsLegendSidebarOpen}
             />
-            {/*
-            {isOpen && position && (
-              <Overlay
-                isOpen={isOpen}
-                initialPosition={{ x: 300, y: -150 }}
-                onClose={() => setIsOpen(false)}
-              >
-                {features.length > 0 ? (
-                  <div>
-                    <h3>Objektinformasjon</h3>
-                    {features.map((feature, index) => (
-                      <iframe
-                        key={index}
-                        srcDoc={feature}
-                        title={`Feature-${index}`}
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          border: "none",
-                        }}
-                      />
-                    ))}
-                  </div>
-                ) : (
-                  <p>Ingen data</p>
-                )}
-              </Overlay>
-            )}*/}
+            <QueryOverlay
+              map={mapInstance}
+              coordinate={clickCoord}
+              feature={clickedFeature}
+              onClose={() => {
+                setClickCoord(null);
+                setClickedFeature(null);
+              }}
+            />
           </>
         )}
       </div>
