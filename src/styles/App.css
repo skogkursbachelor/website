@@ -197,7 +197,7 @@ body {
   overflow: y;
   word-wrap: break-word;
   opacity: 0.9;
-  transform: translateX(-50%) translateY(7px);
+  transform: translateX(-50%);
   margin-bottom: 15px;
 }
 
