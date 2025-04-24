@@ -62,6 +62,7 @@ forestryRoadSource.on("addfeature", (e) => {
       )}-${feature.get("strekningnummer")}`;
       feature.setId(`${roadNumber}`);
     }
+    feature.set("layerId", "forestryRoad");
   }
 });
 
