@@ -92,7 +92,7 @@ const SidebarTresholdConfig: React.FC<Props> = ({
             .sort((a, b) => a.name.localeCompare(b.name)) // Sort alphabetically by name
             .map((type) => (
               <option key={type.code} value={type.code}>
-                {type.name}
+                {`${type.code} - ${type.name}`}
               </option>
             ))}
         </select>
