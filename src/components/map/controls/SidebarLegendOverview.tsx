@@ -34,6 +34,22 @@ const SidebarLegendOverview: React.FC<Props> = ({
     setIsLegendSidebarOpen((prev) => !prev);
   };
 
+  // Close sidebar on Escape key press
+  useEffect(() => {
+    const handleEscapeKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsLegendSidebarOpen(false); // Close sidebar
+      }
+    };
+
+    window.addEventListener("keydown", handleEscapeKey);
+
+    // Cleanup the event listener on component unmount
+    return () => {
+      window.removeEventListener("keydown", handleEscapeKey);
+    };
+  }, []);
+
   // Use useCallback to memoize the updateVisibleLayers function
   const updateVisibleLayers = useCallback(() => {
     // Use setTimeout to ensure this doesn't run during React's render phase

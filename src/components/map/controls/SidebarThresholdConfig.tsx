@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { superficialDepositTypes } from "../../../constants/superficialDepositTypes";
 
 interface Props {
@@ -34,6 +34,22 @@ const SidebarTresholdConfig: React.FC<Props> = ({
   const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedType(Number(event.target.value));
   };
+
+  // Close sidebar on Escape key press
+  useEffect(() => {
+    const handleEscapeKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsConfigSidebarOpen(false); // Close sidebar
+      }
+    };
+
+    window.addEventListener("keydown", handleEscapeKey);
+
+    // Cleanup the event listener on component unmount
+    return () => {
+      window.removeEventListener("keydown", handleEscapeKey);
+    };
+  }, []);
 
   return (
     <div>

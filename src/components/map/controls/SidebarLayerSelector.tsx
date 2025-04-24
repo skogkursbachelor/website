@@ -27,6 +27,22 @@ const SidebarLayerSelector: React.FC<SidebarProps> = ({
     setLayerSidebarOpen(isLayerSidebarOpen);
   }, [isLayerSidebarOpen, setLayerSidebarOpen]);
 
+  // Close sidebar on Escape key press
+  useEffect(() => {
+    const handleEscapeKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsLayerSidebarOpen(false); // Close sidebar
+      }
+    };
+
+    window.addEventListener("keydown", handleEscapeKey);
+
+    // Cleanup the event listener on component unmount
+    return () => {
+      window.removeEventListener("keydown", handleEscapeKey);
+    };
+  }, []);
+
   const toggleSidebar = () => {
     setIsLayerSidebarOpen((prev) => !prev);
   };
