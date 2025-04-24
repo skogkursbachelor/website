@@ -171,9 +171,10 @@ body {
   justify-content: center;
   align-items: center;
   z-index: 10;
+  border: none;
 }
 
-.date-picker-button:hover {
+.date-picker-button:not([disabled]):hover {
   background: #0053ab;
 }
 

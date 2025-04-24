@@ -58,7 +58,30 @@ const DatePicker: React.FC<Props> = ({ layers, date, setDate }) => {
   const maxDate = new Date(new Date().setDate(new Date().getDate() + 9));
   maxDate.setHours(23, 59, 59, 999);
 
+  const prevDay = new Date(date);
+  prevDay.setDate(prevDay.getDate() - 1);
+
+  const prevWeek = new Date(date);
+  prevWeek.setDate(prevWeek.getDate() - 7);
+
+  const prevYear = new Date(date);
+  prevYear.setFullYear(prevYear.getFullYear() - 1);
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const nextDay = new Date(date);
+  nextDay.setDate(nextDay.getDate() + 1);
+
+  const nextWeek = new Date(date);
+  nextWeek.setDate(nextWeek.getDate() + 7);
+
+  const nextYear = new Date(date);
+  nextYear.setFullYear(nextYear.getFullYear() + 1);
+
   const isValidDate = (date: Date) => date >= minDate && date <= maxDate;
+
+  const isToday = date.toLocaleDateString() === today.toLocaleDateString();
 
   const handleDateChange = (newDate: Date) => {
     if (isNaN(newDate.getTime()) || !isValidDate(newDate)) {
@@ -69,24 +92,6 @@ const DatePicker: React.FC<Props> = ({ layers, date, setDate }) => {
     setDate(newDate);
     updateLayerDates(newDate);
   };
-
-  const prevDay = new Date(date);
-  prevDay.setDate(prevDay.getDate() - 1);
-
-  const prevWeek = new Date(date);
-  prevWeek.setDate(prevWeek.getDate() - 7);
-
-  const prevYear = new Date(date);
-  prevYear.setFullYear(prevYear.getFullYear() - 1);
-
-  const nextDay = new Date(date);
-  nextDay.setDate(nextDay.getDate() + 1);
-
-  const nextWeek = new Date(date);
-  nextWeek.setDate(nextWeek.getDate() + 7);
-
-  const nextYear = new Date(date);
-  nextYear.setFullYear(nextYear.getFullYear() + 1);
 
   return (
     <div className="date-picker">
@@ -171,10 +176,10 @@ const DatePicker: React.FC<Props> = ({ layers, date, setDate }) => {
         className="date-picker-button"
         title="Tilbakestill til dagens dato"
         onClick={() => {
-          const today = new Date();
-          today.setHours(0, 0, 0, 0);
           handleDateChange(today);
         }}
+        disabled={isToday}
+        style={{ cursor: isToday ? "not-allowed" : "pointer" }}
       >
         <ReturnIcon color="white" />
       </button>
