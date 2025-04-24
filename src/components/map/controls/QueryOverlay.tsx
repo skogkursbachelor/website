@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Overlay from "ol/Overlay";
 import { Map } from "ol";
 import { Coordinate } from "ol/coordinate";
@@ -20,14 +20,15 @@ const QueryOverlay: React.FC<Props> = ({
 }) => {
   const overlayRef = useRef<HTMLDivElement | null>(null);
   const olOverlayRef = useRef<Overlay | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
 
   useEffect(() => {
     if (!overlayRef.current) return;
     const overlay = new Overlay({
       element: overlayRef.current,
       stopEvent: true,
-      positioning: "top-center", // Using top-center as you specified
-      offset: [0, 10], // Add a small offset for better positioning
+      positioning: "top-center",
+      offset: [0, 10],
       autoPan: {
         animation: {
           duration: 250,
@@ -36,8 +37,17 @@ const QueryOverlay: React.FC<Props> = ({
     });
     map.addOverlay(overlay);
     olOverlayRef.current = overlay;
+
+    const handleDragStart = () => setIsDragging(true);
+    const handleDragEnd = () => setIsDragging(false);
+
+    map.on("pointerdrag", handleDragStart);
+    map.on("pointermove", handleDragEnd);
+
     return () => {
       map.removeOverlay(overlay);
+      map.un("pointerdrag", handleDragStart);
+      map.un("pointermove", handleDragEnd);
     };
   }, [map]);
 
@@ -60,6 +70,15 @@ const QueryOverlay: React.FC<Props> = ({
 
     const handleMapClick = (event: MouseEvent) => {
       const container = overlayRef.current;
+
+      if (
+        isDragging ||
+        !container ||
+        container.contains(event.target as Node)
+      ) {
+        // Prevent closing overlay if dragging or clicking inside the overlay
+        return;
+      }
 
       // Check if the click is on the map AND not inside the overlay
       if (container && !container.contains(event.target as Node)) {
@@ -84,7 +103,7 @@ const QueryOverlay: React.FC<Props> = ({
         mapElement.removeEventListener("click", handleMapClick);
       }
     };
-  }, [map, onClose]);
+  }, [map, onClose, isDragging]);
 
   // Close sidebar on Escape key press
   useEffect(() => {
