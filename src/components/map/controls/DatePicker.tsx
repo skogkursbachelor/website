@@ -5,8 +5,8 @@ import VectorLayer from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
 import Feature from "ol/Feature";
 import Geometry from "ol/geom/Geometry";
-import Chevron from "./Chevron";
-import ReturnIcon from "./Return";
+import Chevron from "./ChevronIcon";
+import ReturnIcon from "./ReturnIcon";
 
 interface Props {
   date: Date;
