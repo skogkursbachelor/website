@@ -334,6 +334,7 @@ body {
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;
   border: none;
+  margin-left: 1.5px;
 }
 
 .zoom-to-layer-button:hover {
