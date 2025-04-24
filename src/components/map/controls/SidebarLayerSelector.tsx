@@ -21,22 +21,29 @@ const SidebarLayerSelector: React.FC<SidebarProps> = ({
   layers,
   setLayerSidebarOpen,
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isLayerSidebarOpen, setIsLayerSidebarOpen] = useState(false);
 
   useEffect(() => {
-    setLayerSidebarOpen(isOpen);
-  }, [isOpen, setLayerSidebarOpen]);
+    setLayerSidebarOpen(isLayerSidebarOpen);
+  }, [isLayerSidebarOpen, setLayerSidebarOpen]);
 
   const toggleSidebar = () => {
-    setIsOpen((prev) => !prev);
+    setIsLayerSidebarOpen((prev) => !prev);
   };
 
   return (
     <div>
-      <button className="layer-sidebar-toggle-button" onClick={toggleSidebar}>
+      <button
+        className={`layer-sidebar-toggle-button ${
+          isLayerSidebarOpen ? "open" : ""
+        }`}
+        onClick={toggleSidebar}
+      >
         {"Kartvalg"}
       </button>
-      <div className={`layer-sidebar ${isOpen ? "open" : "closed"}`}>
+      <div
+        className={`layer-sidebar ${isLayerSidebarOpen ? "open" : "closed"}`}
+      >
         <h3>Kartvalg</h3>
         <ToggleLayers map={map} layers={layers} />
       </div>

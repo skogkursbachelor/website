@@ -14,14 +14,14 @@ const SidebarTresholdConfig: React.FC<Props> = ({
   isLayerSidebarOpen,
   isLegendSidebarOpen,
 }) => {
-  const [isConfigOpen, setIsConfigOpen] = useState(false);
+  const [isConfigSidebarOpen, setIsConfigSidebarOpen] = useState(false);
   const [selectedType, setSelectedType] = useState<number>(
     superficialDepositTypes[0].code
   );
 
   // Toggle sidebar open/closed
   const toggleSidebar = () => {
-    setIsConfigOpen((prev) => !prev);
+    setIsConfigSidebarOpen((prev) => !prev);
   };
 
   const handleRangeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,21 +38,27 @@ const SidebarTresholdConfig: React.FC<Props> = ({
   return (
     <div>
       <button
-        className="threshold-config-sidebar-toggle-button"
+        className={`threshold-config-sidebar-toggle-button ${
+          isConfigSidebarOpen ? "open" : ""
+        }`}
         onClick={toggleSidebar}
       >
         {"Konfigurasjon"}
       </button>
       <div
-        className={`threshold-config-sidebar ${isConfigOpen ? "open" : "closed"}
+        className={`threshold-config-sidebar ${
+          isConfigSidebarOpen ? "open" : "closed"
+        }
           ${
-            isConfigOpen && isLayerSidebarOpen && isLegendSidebarOpen
+            isConfigSidebarOpen && isLayerSidebarOpen && isLegendSidebarOpen
               ? "shifted-2"
               : ""
           }
           ${
-            (isConfigOpen && isLayerSidebarOpen && !isLegendSidebarOpen) ||
-            (isConfigOpen && !isLayerSidebarOpen && isLegendSidebarOpen)
+            (isConfigSidebarOpen &&
+              isLayerSidebarOpen &&
+              !isLegendSidebarOpen) ||
+            (isConfigSidebarOpen && !isLayerSidebarOpen && isLegendSidebarOpen)
               ? "shifted-1"
               : ""
           }

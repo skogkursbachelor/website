@@ -126,7 +126,7 @@ body {
   width: 100%;
   background: #007bff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  z-index: 10;
+  z-index: 10002;
 }
 
 .date-picker {
@@ -141,6 +141,20 @@ body {
 
 .date-picker input {
   cursor: pointer;
+}
+
+.date-picker input[type="date"] {
+  background-color: #006de1;
+  border: none;
+  box-shadow: none; /* remove inner shadow */
+  outline: none; /* remove focus outline (optional, but be careful for accessibility) */
+  color: white; /* to ensure text is readable */
+  padding: 5px; /* optional for spacing */
+  border-radius: 4px; /* optional for styling */
+}
+
+.date-picker input[type="date"]:hover {
+  background-color: #0053ab;
 }
 
 .date-picker-button {
@@ -219,8 +233,8 @@ body {
   right: 0;
   width: 250px;
   height: 100%;
-  background: #66b3ff;
-  box-shadow: -1px 1 5px rgba(0, 0, 0, 0.3);
+  background: #007bff;
+  box-shadow: -1px 1px 5px rgba(0, 0, 0, 0.3);
   padding: 15px;
   overflow-y: auto;
   transition: transform 0.3s ease;
@@ -245,6 +259,10 @@ body {
   font-weight: 600;
   border-radius: 4px;
   z-index: 1001;
+}
+
+.layer-sidebar-toggle-button.open {
+  background-color: #0053ab;
 }
 
 .layer-sidebar.closed + .sidebar-toggle-button {
@@ -295,7 +313,7 @@ body {
   right: 0;
   width: 250px;
   height: 100%;
-  background: #007bff;
+  background: #0072ec;
   box-shadow: -1px 1px 5px rgba(0, 0, 0, 0.3);
   padding: 15px;
   overflow-y: auto;
@@ -326,6 +344,10 @@ body {
   font-weight: 600;
   border-radius: 4px;
   z-index: 1001;
+}
+
+.legend-sidebar-toggle-button.open {
+  background-color: #0053ab;
 }
 
 .legend-list {
@@ -361,7 +383,7 @@ body {
   right: 0;
   width: 250px;
   height: 100%;
-  background: #0053ab;
+  background: #006de1;
   color: white;
   box-shadow: -1px 1px 5px rgba(0, 0, 0, 0.3);
   padding: 15px;
@@ -396,6 +418,10 @@ body {
   font-weight: 600;
   border-radius: 4px;
   z-index: 1001;
+}
+
+.threshold-config-sidebar-toggle-button.open {
+  background-color: #0053ab;
 }
 
 .threshold-config-sidebar h2 {
@@ -456,7 +482,7 @@ input[type="range"] {
   -webkit-appearance: none;
   appearance: none;
   height: 8px;
-  background: #007bff;
+  background: white;
   border-radius: 5px;
   transition: background 0.3s;
 }

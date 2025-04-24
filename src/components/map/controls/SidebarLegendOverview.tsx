@@ -22,16 +22,16 @@ const SidebarLegendOverview: React.FC<Props> = ({
   isLayerSidebarOpen,
   setLegendSidebarOpen,
 }) => {
-  const [isLegendOpen, setIsLegendOpen] = useState(false);
+  const [isLegendSidebarOpen, setIsLegendSidebarOpen] = useState(false);
   const [visibleLayers, setVisibleLayers] = useState<typeof layers>([]);
 
   useEffect(() => {
-    setLegendSidebarOpen(isLegendOpen);
-  }, [isLegendOpen, setLegendSidebarOpen]);
+    setLegendSidebarOpen(isLegendSidebarOpen);
+  }, [isLegendSidebarOpen, setLegendSidebarOpen]);
 
   // Toggle sidebar open/closed
   const toggleSidebar = () => {
-    setIsLegendOpen((prev) => !prev);
+    setIsLegendSidebarOpen((prev) => !prev);
   };
 
   // Use useCallback to memoize the updateVisibleLayers function
@@ -62,12 +62,17 @@ const SidebarLegendOverview: React.FC<Props> = ({
 
   return (
     <div>
-      <button className="legend-sidebar-toggle-button" onClick={toggleSidebar}>
+      <button
+        className={`legend-sidebar-toggle-button ${
+          isLegendSidebarOpen ? "open" : ""
+        }`}
+        onClick={toggleSidebar}
+      >
         {"Tegnforklaring"}
       </button>
       <div
-        className={`legend-sidebar ${isLegendOpen ? "open" : "closed"} ${
-          isLegendOpen && isLayerSidebarOpen ? "shifted" : ""
+        className={`legend-sidebar ${isLegendSidebarOpen ? "open" : "closed"} ${
+          isLegendSidebarOpen && isLayerSidebarOpen ? "shifted" : ""
         }`}
       >
         <h3>Tegnforklaring</h3>
