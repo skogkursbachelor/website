@@ -59,7 +59,7 @@ const SidebarTresholdConfig: React.FC<Props> = ({
         }`}
         onClick={toggleSidebar}
       >
-        {"Konfigurasjon"}
+        {"Grenseverdier"}
       </button>
       <div
         className={`threshold-config-sidebar ${
