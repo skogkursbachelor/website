@@ -146,11 +146,11 @@ body {
 .date-picker input[type="date"] {
   background-color: #006de1;
   border: none;
-  box-shadow: none; /* remove inner shadow */
-  outline: none; /* remove focus outline (optional, but be careful for accessibility) */
-  color: white; /* to ensure text is readable */
-  padding: 5px; /* optional for spacing */
-  border-radius: 4px; /* optional for styling */
+  box-shadow: none;
+  outline: none;
+  color: white;
+  padding: 5px;
+  border-radius: 4px;
 }
 
 .date-picker input[type="date"]:hover {
@@ -261,6 +261,10 @@ body {
   z-index: 1001;
 }
 
+.layer-sidebar-toggle-button:hover {
+  background-color: #0072ec;
+}
+
 .layer-sidebar-toggle-button.open {
   background-color: #0053ab;
 }
@@ -346,6 +350,10 @@ body {
   z-index: 1001;
 }
 
+.legend-sidebar-toggle-button:hover {
+  background-color: #0072ec;
+}
+
 .legend-sidebar-toggle-button.open {
   background-color: #0053ab;
 }
@@ -418,6 +426,10 @@ body {
   font-weight: 600;
   border-radius: 4px;
   z-index: 1001;
+}
+
+.threshold-config-sidebar-toggle-button:hover {
+  background-color: #0072ec;
 }
 
 .threshold-config-sidebar-toggle-button.open {
