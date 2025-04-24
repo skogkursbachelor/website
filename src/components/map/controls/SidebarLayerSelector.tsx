@@ -6,6 +6,7 @@ import VectorLayer from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
 import Feature from "ol/Feature";
 import Geometry from "ol/geom/Geometry";
+import MagnifyingGlassPlusIcon from "./MagnifyingGlassPlusIcon";
 
 interface SidebarProps {
   map: Map;
@@ -127,14 +128,42 @@ const ToggleLayers: React.FC<ToggleLayerProps> = ({ map, layers }) => {
   return (
     <div className="layer-list">
       {layers.map((layer, index) => (
-        <label key={index} className="layer-item">
-          <span>{layer.getProperties().title}</span>
-          <input
-            type="checkbox"
-            checked={visibility[index] || false}
-            onChange={() => toggleLayer(index)}
-          />
-        </label>
+        <div className="layer-item-container" key={index}>
+          <button
+            key={index}
+            className="layer-item"
+            onClick={() => toggleLayer(index)}
+            type="button"
+            style={
+              layer.getProperties().title === "Skogsbilveg" ||
+              layer.getProperties().title === "Markfuktighet"
+                ? {
+                    borderTopRightRadius: "0px",
+                    borderBottomRightRadius: "0px",
+                  }
+                : {}
+            }
+          >
+            <span>{layer.getProperties().title}</span>
+            <input
+              type="checkbox"
+              checked={visibility[index] || false}
+              readOnly
+            />
+          </button>
+          {layer.getProperties().title === "Skogsbilveg" ||
+          layer.getProperties().title === "Markfuktighet" ? (
+            <button
+              className="zoom-to-layer-button"
+              title="Zoom til synlig nivå"
+              onClick={() =>
+                map.getView().animate({ zoom: layer.getMinZoom() + 0.1 })
+              }
+            >
+              {<MagnifyingGlassPlusIcon color="black" />}
+            </button>
+          ) : null}
+        </div>
       ))}
     </div>
   );

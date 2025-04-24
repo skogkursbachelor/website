@@ -293,19 +293,52 @@ body {
   gap: 10px;
 }
 
+.layer-item-container {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  align-items: stretch;
+}
+
 .layer-item {
   display: flex;
   justify-content: space-between;
+  flex-direction: row;
   align-items: center;
+  width: 100%;
   background: #f9f9f9;
-  padding: 10px;
-  border-radius: 5px;
-  border: 1px solid #ddd;
+  border: none;
+}
+
+.layer-item:hover {
+  background-color: #d6d6d6;
+  cursor: pointer;
 }
 
 .layer-item span {
   font-size: 1.2em;
   color: black;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.zoom-to-layer-button {
+  display: flex;
+  flex-direction: row;
+  background: #f9f9f9;
+  padding: 10px;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+  border: none;
+}
+
+.zoom-to-layer-button:hover {
+  background-color: #d6d6d6;
+  cursor: pointer;
 }
 
 .layer-item input {
