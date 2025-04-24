@@ -19,8 +19,7 @@ let currentThresholds = new Map<number, number>();
 
 export const setThresholds = (thresholdMap: Map<number, number>) => {
   currentThresholds = thresholdMap;
-  forestryRoadSource.changed();
-  console.log("Thresholds updated:", currentThresholds);
+  ForestryRoadsLayer.changed();
 };
 
 // Define WFS parameters as variables
