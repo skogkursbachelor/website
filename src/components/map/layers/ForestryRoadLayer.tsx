@@ -74,7 +74,7 @@ const roadStyle = (feature: FeatureLike) => {
   const depositType = feature.get("løsmassekoder");
   //const soilTemperature = feature.get("Jordtemperatur54cm");
 
-  const threshold = currentThresholds.get(depositType) ?? 75;
+  const threshold = currentThresholds.get(depositType[0]) ?? 75;
 
   const color = getTrafficabilityColor(
     frostDepth,
@@ -112,7 +112,7 @@ const ForestryRoadsLayer = new VectorLayer({
   visible: false,
   source: forestryRoadSource,
   style: roadStyle,
-  minZoom: 9.5,
+  minZoom: 10,
 });
 
 export default ForestryRoadsLayer;
