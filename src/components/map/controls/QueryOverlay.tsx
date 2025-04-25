@@ -122,6 +122,7 @@ const QueryOverlay: React.FC<Props> = ({
   }, [onClose]);
 
   const getFeatureInfo = (feature: FeatureLike | null) => {
+    console.log("Feature props:", feature?.getProperties());
     if (!feature) return null;
     const props = feature.getProperties();
     const fieldLabels: Record<string, string> = {
@@ -137,13 +138,13 @@ const QueryOverlay: React.FC<Props> = ({
       vannmetning: "Vannmetning (%)",
       løsmassekoder: "Løsmassekoder",
       jordtemperatur54cm: "Jordtemp. 54 cm (°C)",
+      erklyngesenterundervann: "Er klyngesenter under vann?",
     };
     return (
       <div className="query-overlay-feature-info">
         {Object.entries(fieldLabels).map(([key, label]) => (
           <div key={key}>
-            <strong>{label}:</strong>{" "}
-            {props[key] !== null && props[key] !== undefined ? props[key] : "–"}
+            <strong>{label}:</strong> {props[key].toString() ?? "-"}
           </div>
         ))}
       </div>
