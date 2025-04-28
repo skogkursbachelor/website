@@ -79,6 +79,14 @@ const SidebarTresholdConfig: React.FC<Props> = ({
     );
   };
 
+  const prioritizedDepositCodes = [11, 12, 90, 41, 42, 43, 130];
+  const prioritizedDepositTypes = superficialDepositTypes.filter((type) =>
+    prioritizedDepositCodes.includes(type.code)
+  );
+  const otherTypes = superficialDepositTypes.filter(
+    (type) => !prioritizedDepositCodes.includes(type.code)
+  );
+
   useEffect(() => {
     if (
       minRef.current &&
@@ -154,13 +162,17 @@ const SidebarTresholdConfig: React.FC<Props> = ({
           id="deposit-type-select"
           onChange={handleSelectChange}
         >
-          {superficialDepositTypes
-            .sort((a, b) => a.name.localeCompare(b.name))
-            .map((type) => (
-              <option key={type.code} value={type.code}>
-                {`${type.code} - ${type.name}`}
-              </option>
-            ))}
+          {prioritizedDepositTypes.map((type) => (
+            <option key={type.code} value={type.code}>
+              {`${type.code} - ${type.name}`}
+            </option>
+          ))}
+          <option disabled>──────────</option>
+          {otherTypes.map((type) => (
+            <option key={type.code} value={type.code}>
+              {`${type.code} - ${type.name}`}
+            </option>
+          ))}
         </select>
 
         <label htmlFor="soil-moisture-threshold">

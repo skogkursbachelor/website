@@ -388,3 +388,17 @@ export const superficialDepositTypes = [
     name: "Steinrikt, sigende skråningsmateriale",
   },
 ];
+
+export const getSortedSuperficialDepositTypes = () => {
+  const prioritizedCodes = [11, 12, 20, 90];
+
+  const prioritizedOptions = superficialDepositTypes.filter((option) =>
+    prioritizedCodes.includes(option.code)
+  );
+  const otherOptions = superficialDepositTypes.filter(
+    (option) => !prioritizedCodes.includes(option.code)
+  );
+
+  const separator = { code: -1, name: "---" };
+  return [...prioritizedOptions, separator, ...otherOptions];
+};
