@@ -37,9 +37,9 @@ const MapContainer: React.FC = () => {
   const [date, setDate] = useState(new Date());
   const [isLayerSidebarOpen, setIsLayerSidebarOpen] = useState(false);
   const [isLegendSidebarOpen, setIsLegendSidebarOpen] = useState(false);
-  const [thresholds, setThresholdsState] = useState<Map<number, number>>(() =>
-    createDefaultThresholds()
-  );
+  const [thresholds, setThresholdsState] = useState<
+    Map<number, { min: number; max: number }>
+  >(() => createDefaultThresholds());
   const [clickCoord, setClickCoord] = useState<Coordinate | null>(null);
   const [clickedFeature, setClickedFeature] = useState<FeatureLike | null>(
     null
@@ -55,10 +55,14 @@ const MapContainer: React.FC = () => {
     CopernicusSoilMoistureLayer,
   ];
 
-  function createDefaultThresholds(): Map<number, number> {
-    const map = new Map<number, number>();
+  function createDefaultThresholds(): Map<
+    number,
+    { min: number; max: number }
+  > {
+    const map = new Map<number, { min: number; max: number }>();
     superficialDepositTypes.forEach((type) => {
-      map.set(type.code, 75);
+      // Set default values for min and max
+      map.set(type.code, { min: 45, max: 75 });
     });
     return map;
   }

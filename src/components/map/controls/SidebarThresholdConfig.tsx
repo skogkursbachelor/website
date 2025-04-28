@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { superficialDepositTypes } from "../../../constants/superficialDepositTypes";
 
 interface Props {
-  thresholds: Map<number, number>;
-  setThresholdsState: (thresholds: Map<number, number>) => void;
+  thresholds: Map<number, { min: number; max: number }>;
+  setThresholdsState: (
+    thresholds: Map<number, { min: number; max: number }>
+  ) => void;
   isLayerSidebarOpen: boolean;
   isLegendSidebarOpen: boolean;
 }
@@ -19,33 +21,81 @@ const SidebarTresholdConfig: React.FC<Props> = ({
     superficialDepositTypes[0].code
   );
 
-  // Toggle sidebar open/closed
+  const [minValue, setMinValue] = useState<number>(45);
+  const [maxValue, setMaxValue] = useState<number>(75);
+
+  const minRef = useRef<HTMLInputElement>(null);
+  const maxRef = useRef<HTMLInputElement>(null);
+  const leftRangeRef = useRef<HTMLDivElement>(null);
+  const midRangeRef = useRef<HTMLDivElement>(null);
+  const rightRangeRef = useRef<HTMLDivElement>(null);
+
   const toggleSidebar = () => {
     setIsConfigSidebarOpen((prev) => !prev);
   };
 
-  const handleRangeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newThreshold = Number(event.target.value);
-    const updated = new Map(thresholds);
-    updated.set(selectedType, newThreshold);
-    setThresholdsState(updated);
-  };
-
   const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedType(Number(event.target.value));
+    const selectedThreshold = thresholds.get(Number(event.target.value));
+    if (selectedThreshold) {
+      setMinValue(selectedThreshold.min);
+      setMaxValue(selectedThreshold.max);
+    }
   };
 
-  // Close sidebar on Escape key press
+  const handleMinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = Math.min(Number(e.target.value), maxValue - 1);
+    setMinValue(value);
+    updateThresholds(value, maxValue);
+  };
+
+  const handleMaxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = Math.max(Number(e.target.value), minValue + 1);
+    setMaxValue(value);
+    updateThresholds(minValue, value);
+  };
+
+  const updateThresholds = (newMin: number, newMax: number) => {
+    setThresholdsState(
+      new Map(thresholds.set(selectedType, { min: newMin, max: newMax }))
+    );
+  };
+
+  useEffect(() => {
+    if (
+      minRef.current &&
+      maxRef.current &&
+      leftRangeRef.current &&
+      midRangeRef.current &&
+      rightRangeRef.current
+    ) {
+      const min = 0;
+      const max = 100;
+
+      const minPercent = ((minValue - min) / (max - min)) * 100;
+      const maxPercent = ((maxValue - min) / (max - min)) * 100;
+
+      // Left (green)
+      leftRangeRef.current.style.left = "0%";
+      leftRangeRef.current.style.width = `${minPercent}%`;
+
+      // Middle (yellow)
+      midRangeRef.current.style.left = `${minPercent}%`;
+      midRangeRef.current.style.width = `${maxPercent - minPercent}%`;
+
+      // Right (red)
+      rightRangeRef.current.style.left = `${maxPercent}%`;
+      rightRangeRef.current.style.width = `${100 - maxPercent}%`;
+    }
+  }, [minValue, maxValue]);
+
   useEffect(() => {
     const handleEscapeKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        setIsConfigSidebarOpen(false); // Close sidebar
+        setIsConfigSidebarOpen(false);
       }
     };
-
     window.addEventListener("keydown", handleEscapeKey);
-
-    // Cleanup the event listener on component unmount
     return () => {
       window.removeEventListener("keydown", handleEscapeKey);
     };
@@ -61,6 +111,7 @@ const SidebarTresholdConfig: React.FC<Props> = ({
       >
         {"Grenseverdier"}
       </button>
+
       <div
         className={`threshold-config-sidebar ${
           isConfigSidebarOpen ? "open" : "closed"
@@ -82,6 +133,7 @@ const SidebarTresholdConfig: React.FC<Props> = ({
       >
         <h3>Grenseverdier</h3>
         <p>Sett grenseverdier for valgt løsmasse</p>
+
         <label htmlFor="deposit-type-select">Løsmassetype</label>
         <select
           name="deposit-types"
@@ -89,27 +141,76 @@ const SidebarTresholdConfig: React.FC<Props> = ({
           onChange={handleSelectChange}
         >
           {superficialDepositTypes
-            .sort((a, b) => a.name.localeCompare(b.name)) // Sort alphabetically by name
+            .sort((a, b) => a.name.localeCompare(b.name))
             .map((type) => (
               <option key={type.code} value={type.code}>
                 {`${type.code} - ${type.name}`}
               </option>
             ))}
         </select>
-        <label htmlFor="soil-moisture-threshold">Jordfuktighetsgrense</label>
+
+        <label htmlFor="soil-moisture-threshold">
+          Velg vannmetningsgrenser (%) for valgt løsmassetype
+        </label>
         <div className="range-container">
-          <input
-            type="range"
-            id="soil-moisture-threshold"
-            min="0"
-            max="100"
-            step="1"
-            value={thresholds.get(selectedType) ?? 75}
-            onChange={handleRangeChange}
-          />
-          <span className="range-value">
-            {thresholds.get(selectedType) ?? 75}%
-          </span>
+          <div className="slider">
+            <input
+              type="range"
+              min="0"
+              max="100"
+              value={minValue}
+              ref={minRef}
+              onChange={handleMinChange}
+              className="thumb thumb--left"
+            />
+            <input
+              type="range"
+              min="0"
+              max="100"
+              value={maxValue}
+              ref={maxRef}
+              onChange={handleMaxChange}
+              className="thumb thumb--right"
+            />
+            <div className="slider__track" />
+            <div
+              ref={leftRangeRef}
+              className="slider__range slider__range--low"
+            />
+            <div
+              ref={midRangeRef}
+              className="slider__range slider__range--mid"
+            />
+            <div
+              ref={rightRangeRef}
+              className="slider__range slider__range--high"
+            />
+          </div>
+
+          <div className="slider-value-control">
+            <div className="slider-value-control-container">
+              <div className="slider-value-control-container-label">Min %</div>
+              <input
+                className="slider-value-control-container-input"
+                type="number"
+                min="0"
+                max="100"
+                value={minValue}
+                onChange={handleMinChange}
+              />
+            </div>
+            <div className="slider-value-control-container">
+              <div className="slider-value-control-container-label">Max %</div>
+              <input
+                className="slider-value-control-container-input"
+                type="number"
+                min="0"
+                max="100"
+                value={maxValue}
+                onChange={handleMaxChange}
+              />
+            </div>
+          </div>
         </div>
       </div>
     </div>

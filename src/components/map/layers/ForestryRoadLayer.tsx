@@ -15,9 +15,11 @@ proj69.defs(
 );
 register(proj69);
 
-let currentThresholds = new Map<number, number>();
+let currentThresholds = new Map<number, { min: number; max: number }>();
 
-export const setThresholds = (thresholdMap: Map<number, number>) => {
+export const setThresholds = (
+  thresholdMap: Map<number, { min: number; max: number }>
+) => {
   currentThresholds = thresholdMap;
   ForestryRoadsLayer.changed();
 };
@@ -74,13 +76,16 @@ const roadStyle = (feature: FeatureLike) => {
   const depositType = feature.get("løsmassekoder");
   //const soilTemperature = feature.get("Jordtemperatur54cm");
 
-  const threshold = currentThresholds.get(depositType[0]) ?? 75;
+  const thresholds = currentThresholds.get(depositType[0]);
+  const minThreshold = thresholds?.min ?? 45;
+  const maxThreshold = thresholds?.max ?? 75;
 
   const color = getTrafficabilityColor(
     frostDepth,
     10,
     soilSaturation,
-    threshold
+    minThreshold,
+    maxThreshold
   );
 
   // Increase width on hover
