@@ -2,17 +2,21 @@ import React, { useState, useEffect, useRef } from "react";
 import { superficialDepositTypes } from "../../../constants/superficialDepositTypes";
 
 interface Props {
-  thresholds: Map<number, { min: number; max: number }>;
-  setThresholdsState: (
-    thresholds: Map<number, { min: number; max: number }>
+  waterSaturationThresholds: Map<number, { min: number; max: number }>;
+  setWaterSaturationThresholdsState: (
+    waterSaturationThresholds: Map<number, { min: number; max: number }>
   ) => void;
+  frostDepthThreshold: number;
+  setFrostDepthThresholdState: (frostDepthThreshold: number) => void;
   isLayerSidebarOpen: boolean;
   isLegendSidebarOpen: boolean;
 }
 
 const SidebarTresholdConfig: React.FC<Props> = ({
-  thresholds,
-  setThresholdsState,
+  waterSaturationThresholds,
+  setWaterSaturationThresholdsState,
+  frostDepthThreshold,
+  setFrostDepthThresholdState,
   isLayerSidebarOpen,
   isLegendSidebarOpen,
 }) => {
@@ -20,9 +24,12 @@ const SidebarTresholdConfig: React.FC<Props> = ({
   const [selectedType, setSelectedType] = useState<number>(
     superficialDepositTypes[0].code
   );
-
-  const [minValue, setMinValue] = useState<number>(45);
-  const [maxValue, setMaxValue] = useState<number>(75);
+  const [waterSaturationMinValue, setWaterSaturationMinValue] =
+    useState<number>(45);
+  const [waterSaturationMaxValue, setWaterSaturationMaxValue] =
+    useState<number>(75);
+  const [frostDepthThresholdInput, setFrostDepthThresholdInput] =
+    useState<number>(10);
 
   const minRef = useRef<HTMLInputElement>(null);
   const maxRef = useRef<HTMLInputElement>(null);
@@ -36,28 +43,41 @@ const SidebarTresholdConfig: React.FC<Props> = ({
 
   const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedType(Number(event.target.value));
-    const selectedThreshold = thresholds.get(Number(event.target.value));
+    const selectedThreshold = waterSaturationThresholds.get(
+      Number(event.target.value)
+    );
     if (selectedThreshold) {
-      setMinValue(selectedThreshold.min);
-      setMaxValue(selectedThreshold.max);
+      setWaterSaturationMinValue(selectedThreshold.min);
+      setWaterSaturationMaxValue(selectedThreshold.max);
     }
   };
 
   const handleMinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = Math.min(Number(e.target.value), maxValue - 1);
-    setMinValue(value);
-    updateThresholds(value, maxValue);
+    const value = Math.min(Number(e.target.value), waterSaturationMaxValue - 1);
+    setWaterSaturationMinValue(value);
+    updateWaterSaturationThresholds(value, waterSaturationMaxValue);
   };
 
   const handleMaxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = Math.max(Number(e.target.value), minValue + 1);
-    setMaxValue(value);
-    updateThresholds(minValue, value);
+    const value = Math.max(Number(e.target.value), waterSaturationMinValue + 1);
+    setWaterSaturationMaxValue(value);
+    updateWaterSaturationThresholds(waterSaturationMinValue, value);
   };
 
-  const updateThresholds = (newMin: number, newMax: number) => {
-    setThresholdsState(
-      new Map(thresholds.set(selectedType, { min: newMin, max: newMax }))
+  const handleFrostDepthChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = Number(e.target.value);
+    setFrostDepthThresholdInput(value);
+    setFrostDepthThresholdState(value);
+  };
+
+  const updateWaterSaturationThresholds = (newMin: number, newMax: number) => {
+    setWaterSaturationThresholdsState(
+      new Map(
+        waterSaturationThresholds.set(selectedType, {
+          min: newMin,
+          max: newMax,
+        })
+      )
     );
   };
 
@@ -71,23 +91,19 @@ const SidebarTresholdConfig: React.FC<Props> = ({
     ) {
       const min = 0;
       const max = 100;
+      const minPercent = ((waterSaturationMinValue - min) / (max - min)) * 100;
+      const maxPercent = ((waterSaturationMaxValue - min) / (max - min)) * 100;
 
-      const minPercent = ((minValue - min) / (max - min)) * 100;
-      const maxPercent = ((maxValue - min) / (max - min)) * 100;
-
-      // Left (green)
       leftRangeRef.current.style.left = "0%";
       leftRangeRef.current.style.width = `${minPercent}%`;
 
-      // Middle (yellow)
       midRangeRef.current.style.left = `${minPercent}%`;
       midRangeRef.current.style.width = `${maxPercent - minPercent}%`;
 
-      // Right (red)
       rightRangeRef.current.style.left = `${maxPercent}%`;
       rightRangeRef.current.style.width = `${100 - maxPercent}%`;
     }
-  }, [minValue, maxValue]);
+  }, [waterSaturationMinValue, waterSaturationMaxValue]);
 
   useEffect(() => {
     const handleEscapeKey = (event: KeyboardEvent) => {
@@ -152,13 +168,14 @@ const SidebarTresholdConfig: React.FC<Props> = ({
         <label htmlFor="soil-moisture-threshold">
           Velg vannmetningsgrenser (%) for valgt løsmassetype
         </label>
+
         <div className="range-container">
           <div className="slider">
             <input
               type="range"
               min="0"
               max="100"
-              value={minValue}
+              value={waterSaturationMinValue}
               ref={minRef}
               onChange={handleMinChange}
               className="thumb thumb--left"
@@ -167,7 +184,7 @@ const SidebarTresholdConfig: React.FC<Props> = ({
               type="range"
               min="0"
               max="100"
-              value={maxValue}
+              value={waterSaturationMaxValue}
               ref={maxRef}
               onChange={handleMaxChange}
               className="thumb thumb--right"
@@ -195,7 +212,7 @@ const SidebarTresholdConfig: React.FC<Props> = ({
                 type="number"
                 min="0"
                 max="100"
-                value={minValue}
+                value={waterSaturationMinValue}
                 onChange={handleMinChange}
               />
             </div>
@@ -206,8 +223,44 @@ const SidebarTresholdConfig: React.FC<Props> = ({
                 type="number"
                 min="0"
                 max="100"
-                value={maxValue}
+                value={waterSaturationMaxValue}
                 onChange={handleMaxChange}
+              />
+            </div>
+          </div>
+        </div>
+
+        <label htmlFor="frost-depth-threshold" style={{ marginTop: "1rem" }}>
+          Velg frostdybdegrenser (cm)
+        </label>
+        <div className="range-container">
+          <div className="slider single-slider">
+            <input
+              id="frost-depth-threshold"
+              type="range"
+              min="0"
+              max="30"
+              step="0.1"
+              value={frostDepthThresholdInput}
+              onChange={handleFrostDepthChange}
+              className="thumb"
+            />
+            <div className="slider__track single-slider" />
+          </div>
+
+          <div className="slider-value-control">
+            <div className="slider-value-control-container">
+              <div className="slider-value-control-container-label">
+                Frostdybde (cm)
+              </div>
+              <input
+                className="slider-value-control-container-input"
+                type="number"
+                min="0"
+                max="30"
+                step="0.1"
+                value={frostDepthThresholdInput}
+                onChange={handleFrostDepthChange}
               />
             </div>
           </div>

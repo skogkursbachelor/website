@@ -12,7 +12,8 @@ import SidebarLayerSelector from "./controls/SidebarLayerSelector.tsx";
 import SidebarLegendOverview from "./controls/SidebarLegendOverview.tsx";
 import MapGeolocation from "./controls/MapGeolocation.tsx";
 import DatePicker from "./controls/DatePicker.tsx";
-import { setThresholds } from "./layers/ForestryRoadLayer.tsx";
+import { setWaterSaturationThresholds } from "./layers/ForestryRoadLayer.tsx";
+import { setFrostDepthThreshold } from "./layers/ForestryRoadLayer.tsx";
 import SidebarThresholdConfig from "./controls/SidebarThresholdConfig.tsx";
 import { superficialDepositTypes } from "../../constants/superficialDepositTypes.ts";
 import Attribution from "ol/control/Attribution";
@@ -37,9 +38,12 @@ const MapContainer: React.FC = () => {
   const [date, setDate] = useState(new Date());
   const [isLayerSidebarOpen, setIsLayerSidebarOpen] = useState(false);
   const [isLegendSidebarOpen, setIsLegendSidebarOpen] = useState(false);
-  const [thresholds, setThresholdsState] = useState<
-    Map<number, { min: number; max: number }>
-  >(() => createDefaultThresholds());
+  const [waterSaturationThresholdsState, setWaterSaturationThresholdsState] =
+    useState<Map<number, { min: number; max: number }>>(() =>
+      createDefaultThresholds()
+    );
+  const [frostDepthThresholdState, setFrostDepthThresholdState] =
+    useState<number>(10);
   const [clickCoord, setClickCoord] = useState<Coordinate | null>(null);
   const [clickedFeature, setClickedFeature] = useState<FeatureLike | null>(
     null
@@ -68,8 +72,12 @@ const MapContainer: React.FC = () => {
   }
 
   useEffect(() => {
-    setThresholds(thresholds);
-  }, [thresholds]);
+    setWaterSaturationThresholds(waterSaturationThresholdsState);
+  }, [waterSaturationThresholdsState]);
+
+  useEffect(() => {
+    setFrostDepthThreshold(frostDepthThresholdState);
+  }, [frostDepthThresholdState]);
 
   // Initialize the map
   useLayoutEffect(() => {
@@ -132,8 +140,12 @@ const MapContainer: React.FC = () => {
             <MapGeolocation map={mapInstance} />
             <BaseLayerSelector map={mapInstance} />
             <SidebarThresholdConfig
-              thresholds={thresholds}
-              setThresholdsState={setThresholdsState}
+              waterSaturationThresholds={waterSaturationThresholdsState}
+              setWaterSaturationThresholdsState={
+                setWaterSaturationThresholdsState
+              }
+              frostDepthThreshold={frostDepthThresholdState}
+              setFrostDepthThresholdState={setFrostDepthThresholdState}
               isLayerSidebarOpen={isLayerSidebarOpen}
               isLegendSidebarOpen={isLegendSidebarOpen}
             />

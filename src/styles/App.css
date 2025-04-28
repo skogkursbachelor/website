@@ -564,9 +564,15 @@ body {
 }
 
 .slider__track {
-  background: red;
+  background: white;
   width: 100%;
   z-index: 1;
+}
+
+.slider__track.single-slider {
+  background-color: #84ebff;
+  height: 8px;
+  border-radius: 5px;
 }
 
 .slider__range {
@@ -597,8 +603,8 @@ body {
 
 .thumb::-webkit-slider-thumb {
   pointer-events: all;
-  width: 20px;
-  height: 20px;
+  width: 15px;
+  height: 15px;
   border-radius: 50%;
   background: white;
   border: 1px solid #ccc;
@@ -609,8 +615,8 @@ body {
 
 .thumb::-moz-range-thumb {
   pointer-events: all;
-  width: 20px;
-  height: 20px;
+  width: 15px;
+  height: 15px;
   border-radius: 50%;
   background: white;
   border: 1px solid #ccc;

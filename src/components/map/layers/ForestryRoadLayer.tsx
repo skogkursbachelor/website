@@ -16,11 +16,17 @@ proj69.defs(
 register(proj69);
 
 let currentThresholds = new Map<number, { min: number; max: number }>();
+let currentFrostDepthThreshold: number = 10;
 
-export const setThresholds = (
+export const setWaterSaturationThresholds = (
   thresholdMap: Map<number, { min: number; max: number }>
 ) => {
   currentThresholds = thresholdMap;
+  ForestryRoadsLayer.changed();
+};
+
+export const setFrostDepthThreshold = (frostDepthThreshold: number) => {
+  currentFrostDepthThreshold = frostDepthThreshold;
   ForestryRoadsLayer.changed();
 };
 
@@ -80,9 +86,11 @@ const roadStyle = (feature: FeatureLike) => {
   const minThreshold = thresholds?.min ?? 45;
   const maxThreshold = thresholds?.max ?? 75;
 
+  const frostDepthThreshold = currentFrostDepthThreshold;
+
   const color = getTrafficabilityColor(
     frostDepth,
-    10,
+    frostDepthThreshold,
     soilSaturation,
     minThreshold,
     maxThreshold
