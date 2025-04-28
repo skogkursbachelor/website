@@ -144,7 +144,6 @@ const MapContainer: React.FC = () => {
               setWaterSaturationThresholdsState={
                 setWaterSaturationThresholdsState
               }
-              frostDepthThreshold={frostDepthThresholdState}
               setFrostDepthThresholdState={setFrostDepthThresholdState}
               isLayerSidebarOpen={isLayerSidebarOpen}
               isLegendSidebarOpen={isLegendSidebarOpen}

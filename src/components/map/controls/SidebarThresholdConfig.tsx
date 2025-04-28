@@ -6,7 +6,6 @@ interface Props {
   setWaterSaturationThresholdsState: (
     waterSaturationThresholds: Map<number, { min: number; max: number }>
   ) => void;
-  frostDepthThreshold: number;
   setFrostDepthThresholdState: (frostDepthThreshold: number) => void;
   isLayerSidebarOpen: boolean;
   isLegendSidebarOpen: boolean;
@@ -15,7 +14,6 @@ interface Props {
 const SidebarTresholdConfig: React.FC<Props> = ({
   waterSaturationThresholds,
   setWaterSaturationThresholdsState,
-  frostDepthThreshold,
   setFrostDepthThresholdState,
   isLayerSidebarOpen,
   isLegendSidebarOpen,
