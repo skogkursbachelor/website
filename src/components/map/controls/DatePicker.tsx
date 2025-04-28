@@ -58,29 +58,28 @@ const DatePicker: React.FC<Props> = ({ layers, date, setDate }) => {
   const maxDate = new Date(new Date().setDate(new Date().getDate() + 9));
   maxDate.setHours(23, 59, 59, 999);
 
-  const prevDay = new Date(date);
-  prevDay.setDate(prevDay.getDate() - 1);
-
-  const prevWeek = new Date(date);
-  prevWeek.setDate(prevWeek.getDate() - 7);
-
-  const prevYear = new Date(date);
-  prevYear.setFullYear(prevYear.getFullYear() - 1);
-
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  const nextDay = new Date(date);
-  nextDay.setDate(nextDay.getDate() + 1);
+  const createShiftedDate = (days: number, years: number = 0) => {
+    const newDate = new Date(date);
+    if (years) {
+      newDate.setFullYear(newDate.getFullYear() + years);
+    }
+    if (days) {
+      newDate.setDate(newDate.getDate() + days);
+    }
+    return newDate;
+  };
 
-  const nextWeek = new Date(date);
-  nextWeek.setDate(nextWeek.getDate() + 7);
-
-  const nextYear = new Date(date);
-  nextYear.setFullYear(nextYear.getFullYear() + 1);
+  const prevDay = createShiftedDate(-1);
+  const prevWeek = createShiftedDate(-7);
+  const prevYear = createShiftedDate(0, -1);
+  const nextDay = createShiftedDate(1);
+  const nextWeek = createShiftedDate(7);
+  const nextYear = createShiftedDate(0, 1);
 
   const isValidDate = (date: Date) => date >= minDate && date <= maxDate;
-
   const isToday = date.toLocaleDateString() === today.toLocaleDateString();
 
   const handleDateChange = (newDate: Date) => {
@@ -95,37 +94,40 @@ const DatePicker: React.FC<Props> = ({ layers, date, setDate }) => {
 
   return (
     <div className="date-picker">
-      <button
-        className="date-picker-button"
-        title="Gå ett år tilbake"
-        onClick={() => handleDateChange(prevYear)}
-        disabled={!isValidDate(prevYear)}
-        style={{ cursor: !isValidDate(prevYear) ? "not-allowed" : "pointer" }}
-      >
-        <Chevron direction="left" count={3} />
-      </button>
+      <div className="date-picker-group">
+        <button
+          className="date-picker-button"
+          title="Gå ett år tilbake"
+          onClick={() => handleDateChange(prevYear)}
+          disabled={!isValidDate(prevYear)}
+          style={{ cursor: !isValidDate(prevYear) ? "not-allowed" : "pointer" }}
+        >
+          <Chevron direction="left" count={3} />
+        </button>
 
-      <button
-        className="date-picker-button"
-        title="Gå en uke tilbake"
-        onClick={() => handleDateChange(prevWeek)}
-        disabled={!isValidDate(prevWeek)}
-        style={{ cursor: !isValidDate(prevWeek) ? "not-allowed" : "pointer" }}
-      >
-        <Chevron direction="left" count={2} />
-      </button>
+        <button
+          className="date-picker-button"
+          title="Gå en uke tilbake"
+          onClick={() => handleDateChange(prevWeek)}
+          disabled={!isValidDate(prevWeek)}
+          style={{ cursor: !isValidDate(prevWeek) ? "not-allowed" : "pointer" }}
+        >
+          <Chevron direction="left" count={2} />
+        </button>
 
-      <button
-        className="date-picker-button"
-        title="Gå en dag tilbake"
-        onClick={() => handleDateChange(prevDay)}
-        disabled={!isValidDate(prevDay)}
-        style={{ cursor: !isValidDate(prevDay) ? "not-allowed" : "pointer" }}
-      >
-        <Chevron direction="left" count={1} />
-      </button>
+        <button
+          className="date-picker-button"
+          title="Gå en dag tilbake"
+          onClick={() => handleDateChange(prevDay)}
+          disabled={!isValidDate(prevDay)}
+          style={{ cursor: !isValidDate(prevDay) ? "not-allowed" : "pointer" }}
+        >
+          <Chevron direction="left" count={1} />
+        </button>
+      </div>
 
       <input
+        className="date-picker-input"
         type="date"
         value={date.toLocaleDateString("sv-SE")}
         title="Velg dato"
@@ -142,47 +144,47 @@ const DatePicker: React.FC<Props> = ({ layers, date, setDate }) => {
         max={maxDate.toLocaleDateString("sv-SE")}
       />
 
-      <button
-        className="date-picker-button"
-        title="Gå en dag frem"
-        onClick={() => handleDateChange(nextDay)}
-        disabled={!isValidDate(nextDay)}
-        style={{ cursor: !isValidDate(nextDay) ? "not-allowed" : "pointer" }}
-      >
-        <Chevron direction="right" count={1} />
-      </button>
+      <div className="date-picker-group">
+        <button
+          className="date-picker-button"
+          title="Gå en dag frem"
+          onClick={() => handleDateChange(nextDay)}
+          disabled={!isValidDate(nextDay)}
+          style={{ cursor: !isValidDate(nextDay) ? "not-allowed" : "pointer" }}
+        >
+          <Chevron direction="right" count={1} />
+        </button>
 
-      <button
-        className="date-picker-button"
-        title="Gå en uke frem"
-        onClick={() => handleDateChange(nextWeek)}
-        disabled={!isValidDate(nextWeek)}
-        style={{ cursor: !isValidDate(nextWeek) ? "not-allowed" : "pointer" }}
-      >
-        <Chevron direction="right" count={2} />
-      </button>
+        <button
+          className="date-picker-button"
+          title="Gå en uke frem"
+          onClick={() => handleDateChange(nextWeek)}
+          disabled={!isValidDate(nextWeek)}
+          style={{ cursor: !isValidDate(nextWeek) ? "not-allowed" : "pointer" }}
+        >
+          <Chevron direction="right" count={2} />
+        </button>
 
-      <button
-        className="date-picker-button"
-        title="Gå ett år frem"
-        onClick={() => handleDateChange(nextYear)}
-        disabled={!isValidDate(nextYear)}
-        style={{ cursor: !isValidDate(nextYear) ? "not-allowed" : "pointer" }}
-      >
-        <Chevron direction="right" count={3} />
-      </button>
+        <button
+          className="date-picker-button"
+          title="Gå ett år frem"
+          onClick={() => handleDateChange(nextYear)}
+          disabled={!isValidDate(nextYear)}
+          style={{ cursor: !isValidDate(nextYear) ? "not-allowed" : "pointer" }}
+        >
+          <Chevron direction="right" count={3} />
+        </button>
 
-      <button
-        className="date-picker-button"
-        title="Tilbakestill til dagens dato"
-        onClick={() => {
-          handleDateChange(today);
-        }}
-        disabled={isToday}
-        style={{ cursor: isToday ? "not-allowed" : "pointer" }}
-      >
-        <ReturnIcon color="white" />
-      </button>
+        <button
+          className="date-picker-button"
+          title="Tilbakestill til dagens dato"
+          onClick={() => handleDateChange(today)}
+          disabled={isToday}
+          style={{ cursor: isToday ? "not-allowed" : "pointer" }}
+        >
+          <ReturnIcon color="white" />
+        </button>
+      </div>
     </div>
   );
 };
