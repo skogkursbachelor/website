@@ -138,7 +138,6 @@ const QueryOverlay: React.FC<Props> = ({
       vannmetning: "Vannmetning (%)",
       løsmassekoder: "Løsmassekoder",
       jordtemperatur54cm: "Jordtemp. 54 cm (°C)",
-      erklyngesenterundervann: "Er klyngesenter under vann?",
     };
     return (
       <div className="query-overlay-feature-info">
