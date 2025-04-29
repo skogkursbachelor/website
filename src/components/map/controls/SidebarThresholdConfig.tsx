@@ -154,92 +154,100 @@ const SidebarTresholdConfig: React.FC<Props> = ({
         `}
       >
         <h3>Grenseverdier</h3>
-        <label htmlFor="deposit-type-select">Løsmassetype</label>
-        <select
-          name="deposit-types"
-          id="deposit-type-select"
-          onChange={handleSelectChange}
-        >
-          {prioritizedDepositTypes.map((type) => (
-            <option key={type.code} value={type.code}>
-              {`${type.code} - ${type.name}`}
-            </option>
-          ))}
-          <option disabled>──────────</option>
-          {otherTypes.map((type) => (
-            <option key={type.code} value={type.code}>
-              {`${type.code} - ${type.name}`}
-            </option>
-          ))}
-        </select>
+        <div>
+          <label htmlFor="deposit-type-select">Løsmassetype</label>
+          <select
+            name="deposit-types"
+            id="deposit-type-select"
+            onChange={handleSelectChange}
+          >
+            {prioritizedDepositTypes.map((type) => (
+              <option key={type.code} value={type.code}>
+                {`${type.code} - ${type.name}`}
+              </option>
+            ))}
+            <option disabled>──────────</option>
+            {otherTypes.map((type) => (
+              <option key={type.code} value={type.code}>
+                {`${type.code} - ${type.name}`}
+              </option>
+            ))}
+          </select>
 
-        <label htmlFor="soil-moisture-threshold">
-          Velg vannmetningsgrenser (%) for valgt løsmassetype
-        </label>
+          <label htmlFor="soil-moisture-threshold">
+            Velg vannmetningsgrenser (%) for valgt løsmassetype
+          </label>
 
-        <div className="range-container">
-          <div className="slider">
-            <input
-              type="range"
-              min="0"
-              max="100"
-              value={waterSaturationMinValue}
-              ref={minRef}
-              onChange={handleMinChange}
-              className="thumb thumb--left"
-            />
-            <input
-              type="range"
-              min="0"
-              max="100"
-              value={waterSaturationMaxValue}
-              ref={maxRef}
-              onChange={handleMaxChange}
-              className="thumb thumb--right"
-            />
-            <div className="slider__track" />
-            <div
-              ref={leftRangeRef}
-              className="slider__range slider__range--low"
-            />
-            <div
-              ref={midRangeRef}
-              className="slider__range slider__range--mid"
-            />
-            <div
-              ref={rightRangeRef}
-              className="slider__range slider__range--high"
-            />
-          </div>
-
-          <div className="slider-value-control">
-            <div className="slider-value-control-container">
-              <div className="slider-value-control-container-label">Min %</div>
+          <div className="range-container">
+            <div className="slider">
               <input
-                className="slider-value-control-container-input"
-                type="number"
+                type="range"
                 min="0"
                 max="100"
                 value={waterSaturationMinValue}
+                ref={minRef}
                 onChange={handleMinChange}
+                className="thumb thumb--left"
               />
-            </div>
-            <div className="slider-value-control-container">
-              <div className="slider-value-control-container-label">Max %</div>
               <input
-                className="slider-value-control-container-input"
-                type="number"
+                type="range"
                 min="0"
                 max="100"
                 value={waterSaturationMaxValue}
+                ref={maxRef}
                 onChange={handleMaxChange}
+                className="thumb thumb--right"
               />
+              <div className="slider__track" />
+              <div
+                ref={leftRangeRef}
+                className="slider__range slider__range--low"
+              />
+              <div
+                ref={midRangeRef}
+                className="slider__range slider__range--mid"
+              />
+              <div
+                ref={rightRangeRef}
+                className="slider__range slider__range--high"
+              />
+            </div>
+
+            <div className="slider-value-control">
+              <div className="slider-value-control-container">
+                <div className="slider-value-control-container-label">
+                  Min %
+                </div>
+                <input
+                  className="slider-value-control-container-input"
+                  type="number"
+                  min="0"
+                  max="100"
+                  value={waterSaturationMinValue}
+                  onChange={handleMinChange}
+                />
+              </div>
+              <div className="slider-value-control-container">
+                <div className="slider-value-control-container-label">
+                  Max %
+                </div>
+                <input
+                  className="slider-value-control-container-input"
+                  type="number"
+                  min="0"
+                  max="100"
+                  value={waterSaturationMaxValue}
+                  onChange={handleMaxChange}
+                />
+              </div>
             </div>
           </div>
         </div>
 
+        <hr className="threshold-config-sidebar-separator" />
+
         <label htmlFor="frost-depth-threshold" style={{ marginTop: "1rem" }}>
-          Velg frostdybdegrenser (cm)
+          Velg frostdybdegrense (cm)
         </label>
         <div className="range-container">
           <div className="slider single-slider">

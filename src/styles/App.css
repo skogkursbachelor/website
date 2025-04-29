@@ -440,6 +440,9 @@ body {
 
 /* Threshold Config Sidebar Styling*/
 .threshold-config-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
   position: absolute;
   top: 0;
   right: 0;
@@ -536,6 +539,14 @@ body {
 
 .threshold-config-sidebar select option:hover {
   background-color: #f1f1f1;
+}
+
+.threshold-config-sidebar-separator {
+  width: 100%;
+  height: 1px;
+  background-color: lightgray;
+  margin: 10px 0;
+  border: none;
 }
 
 .range-container {
