@@ -83,8 +83,8 @@ const roadStyle = (feature: FeatureLike) => {
   //const soilTemperature = feature.get("Jordtemperatur54cm");
 
   const thresholds = currentThresholds.get(depositType[0]);
-  const minThreshold = thresholds?.min ?? 45;
-  const maxThreshold = thresholds?.max ?? 75;
+  const minThreshold = thresholds?.min ?? 65;
+  const maxThreshold = thresholds?.max ?? 80;
 
   const frostDepthThreshold = currentFrostDepthThreshold;
 

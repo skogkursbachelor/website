@@ -23,9 +23,9 @@ const SidebarTresholdConfig: React.FC<Props> = ({
     superficialDepositTypes[0].code
   );
   const [waterSaturationMinValue, setWaterSaturationMinValue] =
-    useState<number>(45);
+    useState<number>(65);
   const [waterSaturationMaxValue, setWaterSaturationMaxValue] =
-    useState<number>(75);
+    useState<number>(80);
   const [frostDepthThresholdInput, setFrostDepthThresholdInput] =
     useState<number>(10);
 
@@ -154,8 +154,6 @@ const SidebarTresholdConfig: React.FC<Props> = ({
         `}
       >
         <h3>Grenseverdier</h3>
-        <p>Sett grenseverdier for valgt løsmasse</p>
-
         <label htmlFor="deposit-type-select">Løsmassetype</label>
         <select
           name="deposit-types"
