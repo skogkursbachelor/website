@@ -79,7 +79,7 @@ const SidebarTresholdConfig: React.FC<Props> = ({
     );
   };
 
-  const prioritizedDepositCodes = [11, 12, 90, 41, 42, 43, 130];
+  const prioritizedDepositCodes = [11, 12, 20, 21, 41, 42, 43, 50, 90, 130];
   const prioritizedDepositTypes = superficialDepositTypes.filter((type) =>
     prioritizedDepositCodes.includes(type.code)
   );
