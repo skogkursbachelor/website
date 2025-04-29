@@ -159,6 +159,7 @@ const SidebarTresholdConfig: React.FC<Props> = ({
           <select
             name="deposit-types"
             id="deposit-type-select"
+            value={selectedType}
             onChange={handleSelectChange}
           >
             {prioritizedDepositTypes.map((type) => (
