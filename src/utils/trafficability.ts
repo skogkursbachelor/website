@@ -1,11 +1,11 @@
 // Good trafficability is represented by green color
-const green = [0, 255, 0];
+const green = [41, 212, 96];
 
 // Yellow indicates caution, meaning the trafficability is moderate
-const yellow = [255, 255, 0];
+const yellow = [248, 252, 0];
 
 // Red indicates poor trafficability
-const red = [255, 0, 0];
+const red = [248, 34, 0];
 
 /**
  * Determines the color of a road based on frost depth and water saturation.
