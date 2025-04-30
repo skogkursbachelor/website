@@ -248,7 +248,7 @@ const SidebarTresholdConfig: React.FC<Props> = ({
         <hr className="threshold-config-sidebar-separator" />
 
         <label htmlFor="frost-depth-threshold" style={{ marginTop: "1rem" }}>
-          Velg frostdybdegrense (cm)
+          Velg teledybdegrense (cm)
         </label>
         <div className="range-container">
           <div className="slider single-slider">
@@ -268,7 +268,7 @@ const SidebarTresholdConfig: React.FC<Props> = ({
           <div className="slider-value-control">
             <div className="slider-value-control-container">
               <div className="slider-value-control-container-label">
-                Frostdybde (cm)
+                Teledybde (cm)
               </div>
               <input
                 className="slider-value-control-container-input"
