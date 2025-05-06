@@ -121,7 +121,14 @@ export const setHoveredFeature = (feature: FeatureLike | null) => {
 };
 
 const ForestryRoadsLayer = new VectorLayer({
-  properties: { title: "Skogsbilveg" },
+  properties: {
+    title: "Skogsbilveg",
+    legendUrls: {
+      skogsbilveg: `http://${window.location.hostname}:${
+        import.meta.env.VITE_API_PORT
+      }${import.meta.env.VITE_LEGEND_FORESTRYROADS_URL}`,
+    },
+  },
   visible: false,
   source: forestryRoadSource,
   style: roadStyle,
