@@ -13,30 +13,30 @@ const red = [248, 34, 0];
  * @param frostDepth - The depth of frost in cm.
  * @param frostDepthThreshold - The threshold for frost depth (default is 10 cm).
  * @param waterSaturation - The percentage of water saturation.
- * @param minWaterSaturationThreshold - The minimum threshold for water saturation (default is 45%).
- * @param maxWaterSaturationThreshold - The maximum threshold for water saturation (default is 75%).
+ * @param minWaterSaturationThreshold - The minimum threshold for water saturation (default is 65%).
+ * @param maxWaterSaturationThreshold - The maximum threshold for water saturation (default is 80%).
  * @returns An array representing the RGB color for trafficability.
  */
 function getTrafficabilityColor(
   frostDepth: number,
   frostDepthThreshold = 10,
   waterSaturation: number,
-  minWaterSaturationThreshold = 45,
-  maxWaterSaturationThreshold = 75
+  minSaturationThreshold = 65,
+  maxSaturationThreshold = 80
 ): number[] {
-  let color = green;
-
-  // If frost depth is above the threshold, trafficability is always good
-  if (frostDepth < frostDepthThreshold) {
-    // Check if the water saturation is above the thresholds for each superficial deposit type
-    if (waterSaturation >= maxWaterSaturationThreshold) {
-      color = red;
-    } else if (waterSaturation >= minWaterSaturationThreshold) {
-      color = yellow;
-    }
+  if (frostDepth >= frostDepthThreshold) {
+    return green;
   }
 
-  return color;
+  if (waterSaturation >= maxSaturationThreshold) {
+    return red;
+  }
+
+  if (waterSaturation >= minSaturationThreshold) {
+    return yellow;
+  }
+
+  return green;
 }
 
 export { getTrafficabilityColor };
