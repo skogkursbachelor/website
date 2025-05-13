@@ -31,7 +31,6 @@ const DatePicker: React.FC<Props> = ({ layers, date, setDate }) => {
       } else if (source instanceof VectorSource) {
         const extent = source.getExtent();
         if (!extent?.every((v) => isFinite(v))) {
-          console.warn("Invalid extent, skipping WFS update");
           return;
         }
 
@@ -54,7 +53,7 @@ const DatePicker: React.FC<Props> = ({ layers, date, setDate }) => {
     });
   };
 
-  const minDate = new Date("1970-01-01T00:00:00Z");
+  const minDate = new Date("1957-09-01T00:00:00Z");
   const maxDate = new Date(new Date().setDate(new Date().getDate() + 9));
   maxDate.setHours(23, 59, 59, 999);
 

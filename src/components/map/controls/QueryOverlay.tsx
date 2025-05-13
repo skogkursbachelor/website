@@ -123,7 +123,6 @@ const QueryOverlay: React.FC<Props> = ({
 	}, [onClose]);
 
 	const getFeatureInfo = (feature: FeatureLike | null) => {
-		console.log("Feature props:", feature?.getProperties());
 		if (!feature) return null;
 		const props = feature.getProperties();
 		const fieldLabels: Record<string, string> = {

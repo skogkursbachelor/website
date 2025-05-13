@@ -112,12 +112,6 @@ const roadStyle = (feature: FeatureLike) => {
 export const setHoveredFeature = (feature: FeatureLike | null) => {
   hoveredFeature = feature;
   forestryRoadSource.changed(); // Trigger re-render
-  console.log(
-    "teledyp:",
-    feature?.get("teledybde"),
-    "vannmetning",
-    feature?.get("vannmetning")
-  );
 };
 
 const ForestryRoadsLayer = new VectorLayer({
