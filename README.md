@@ -4,8 +4,9 @@ The website serves as the user interface of the system, allowing users to visual
 
 For a full overview, read the [thesis](https://github.com/skogkursbachelor/thesis).
 
+This repository is archived, check the [fork](https://github.com/erikbjo/timberlight-website) for eventual updates.
+
 ## Contact
 
 - 👑 [Erik Bjørnsen](mailto:erbj@stud.ntnu.no) 🚀
 - 💪🏻 [Simon Houmb](mailto:simonhou@stud.ntnu.no) 🥇
-
